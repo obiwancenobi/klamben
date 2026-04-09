@@ -37,6 +37,45 @@ void main() {
       expect(files.length, 21,
           reason: 'expected 21 commands, got ${files.length}');
     });
+
+    test('--verify exits 0 when build is fresh', () async {
+      // Ensure build is current
+      await Process.run('dart', ['run', 'tool/build.dart'],
+          workingDirectory: _repoRoot());
+
+      final result = await Process.run(
+        'dart',
+        ['run', 'tool/build.dart', '--verify'],
+        workingDirectory: _repoRoot(),
+      );
+      expect(result.exitCode, 0,
+          reason: 'verify should succeed after fresh build: ${result.stderr}');
+    });
+
+    test('--verify exits nonzero when build is stale', () async {
+      // Fresh build
+      await Process.run('dart', ['run', 'tool/build.dart'],
+          workingDirectory: _repoRoot());
+
+      // Tamper: overwrite generated SKILL.md with different content
+      final skill = File(
+          '${_repoRoot()}/build/.claude/skills/flutter-design/SKILL.md');
+      final original = await skill.readAsString();
+      await skill.writeAsString('tampered');
+
+      try {
+        final result = await Process.run(
+          'dart',
+          ['run', 'tool/build.dart', '--verify'],
+          workingDirectory: _repoRoot(),
+        );
+        expect(result.exitCode, isNot(0),
+            reason: 'verify should fail when build is stale');
+      } finally {
+        // Restore
+        await skill.writeAsString(original);
+      }
+    });
   });
 }
 
