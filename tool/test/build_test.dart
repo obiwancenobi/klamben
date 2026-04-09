@@ -8,8 +8,8 @@ void main() {
           workingDirectory: _repoRoot());
       expect(result.exitCode, 0, reason: 'build failed: ${result.stderr}');
 
-      final skillFile = File(
-          '${_repoRoot()}/build/.claude/skills/flutter-design/SKILL.md');
+      final skillFile =
+          File('${_repoRoot()}/build/.claude/skills/flutter-design/SKILL.md');
       expect(skillFile.existsSync(), isTrue,
           reason: 'expected SKILL.md to be generated');
       expect(skillFile.readAsStringSync(), contains('name: flutter-design'));
@@ -58,8 +58,8 @@ void main() {
           workingDirectory: _repoRoot());
 
       // Tamper: overwrite generated SKILL.md with different content
-      final skill = File(
-          '${_repoRoot()}/build/.claude/skills/flutter-design/SKILL.md');
+      final skill =
+          File('${_repoRoot()}/build/.claude/skills/flutter-design/SKILL.md');
       final original = await skill.readAsString();
       await skill.writeAsString('tampered');
 
