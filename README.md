@@ -37,7 +37,7 @@ From the root of your Flutter project:
 
 ```bash
 # Clone klamben somewhere
-git clone https://github.com/<you>/klamben.git ~/klamben
+git clone https://github.com/obiwancenobi/klamben.git ~/klamben
 
 # Copy the generated .claude/ folder into your Flutter project
 cp -r ~/klamben/build/.claude /path/to/your/flutter-app/.claude
@@ -49,7 +49,7 @@ for `.dart` files. Invoke commands with `/audit`, `/polish`, etc.
 ## Develop klamben itself
 
 ```bash
-git clone https://github.com/<you>/klamben.git
+git clone https://github.com/obiwancenobi/klamben.git
 cd klamben
 cd tool && dart pub get && cd ..
 
