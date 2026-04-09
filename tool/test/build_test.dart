@@ -26,6 +26,17 @@ void main() {
       expect(files.length, 7,
           reason: 'expected 7 reference modules, got ${files.length}');
     });
+
+    test('claude harness writes 21 command files', () async {
+      await Process.run('dart', ['run', 'tool/build.dart'],
+          workingDirectory: _repoRoot());
+
+      final cmdDir = Directory('${_repoRoot()}/build/.claude/commands');
+      expect(cmdDir.existsSync(), isTrue);
+      final files = cmdDir.listSync().whereType<File>().toList();
+      expect(files.length, 21,
+          reason: 'expected 21 commands, got ${files.length}');
+    });
   });
 }
 

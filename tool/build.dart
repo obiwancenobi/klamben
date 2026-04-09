@@ -105,5 +105,16 @@ Future<Map<String, String>> _computeFiles(HarnessSpec h) async {
     files[outPath] = await entity.readAsString();
   }
 
+  // Commands
+  final cmdSrcDir = Directory(p.join(repoRoot, srcCommandsDir));
+  final cmdEntries = cmdSrcDir.listSync().whereType<File>().toList();
+  cmdEntries.sort((a, b) => a.path.compareTo(b.path));
+  for (final entity in cmdEntries) {
+    if (!entity.path.endsWith('.md')) continue;
+    final basename = p.basename(entity.path);
+    final outPath = p.join(h.commandsDir, basename);
+    files[outPath] = await entity.readAsString();
+  }
+
   return files;
 }
