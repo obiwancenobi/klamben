@@ -88,6 +88,22 @@ Future<void> _buildHarness(HarnessSpec h, {required bool verify}) async {
 }
 
 Future<Map<String, String>> _computeFiles(HarnessSpec h) async {
-  // Filled in by Task 16 (skill fan-out) and Task 17 (commands fan-out).
-  return {};
+  final files = <String, String>{};
+
+  // Main SKILL.md
+  final skillSrc = File(p.join(repoRoot, srcSkillDir, 'SKILL.md'));
+  files[h.skillPath] = await skillSrc.readAsString();
+
+  // Reference modules
+  final refSrcDir = Directory(p.join(repoRoot, srcSkillDir, 'references'));
+  final refEntries = refSrcDir.listSync().whereType<File>().toList();
+  refEntries.sort((a, b) => a.path.compareTo(b.path));
+  for (final entity in refEntries) {
+    if (!entity.path.endsWith('.md')) continue;
+    final basename = p.basename(entity.path);
+    final outPath = p.join(h.referencesDir, basename);
+    files[outPath] = await entity.readAsString();
+  }
+
+  return files;
 }
