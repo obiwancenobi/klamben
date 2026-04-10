@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.3'
+
+      - name: Install tool deps
+        working-directory: tool
+        run: dart pub get
+
+      - name: Install cli deps
+        working-directory: cli
+        run: dart pub get
+
+      - name: Verify build is current
+        run: dart run tool/build.dart --verify
+
+      - name: Analyze tool
+        run: dart analyze tool/
+
+      - name: Analyze cli
+        working-directory: cli
+        run: dart analyze lib/ test/ bin/
+
+      - name: Format check tool
+        run: dart format --set-exit-if-changed tool/
+
+      - name: Format check cli
+        working-directory: cli
+        run: dart format --set-exit-if-changed lib/ test/ bin/
+
+      - name: Test tool
+        working-directory: tool
+        run: dart test
+
+      - name: Test cli
+        working-directory: cli
+        run: dart test
