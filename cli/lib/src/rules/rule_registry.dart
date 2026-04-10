@@ -7,7 +7,10 @@ import 'layout/magic_numbers.dart';
 import 'layout/missing_safearea.dart';
 import 'layout/nested_padding.dart';
 import 'layout/no_flexible.dart';
+import 'platform/cupertino_on_android.dart';
+import 'platform/material_on_ios.dart';
 import 'platform/missing_adaptive.dart';
+import 'platform/wrong_nav_pattern.dart';
 import 'rule.dart';
 import 'visual/gradient_abuse.dart';
 import 'visual/hardcoded_color.dart';
@@ -40,6 +43,9 @@ class RuleRegistry {
       NoFlexibleRule(),
       FixedRowOverflowRule(),
       MissingAdaptiveRule(),
+      MaterialOnIosRule(),
+      CupertinoOnAndroidRule(),
+      WrongNavPatternRule(),
       SwallowedErrorsRule(),
     ]);
   }
