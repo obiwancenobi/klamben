@@ -1,6 +1,7 @@
 // cli/lib/src/rules/rule_registry.dart
 
 import 'rule.dart';
+import 'visual/hardcoded_color.dart';
 
 /// Holds all registered Dart Rule instances. Rules are added by
 /// constructor in this class to keep registration explicit and
@@ -10,8 +11,9 @@ class RuleRegistry {
   const RuleRegistry._(this.rules);
 
   factory RuleRegistry.defaults() {
-    // Seed rules — populated in Tasks 6-9.
-    return const RuleRegistry._([]);
+    return RuleRegistry._([
+      HardcodedColorRule(),
+    ]);
   }
 
   Iterable<Rule> byCategory(RuleCategory c) =>
