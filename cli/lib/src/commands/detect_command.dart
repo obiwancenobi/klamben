@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 
 import '../engine.dart';
+import '../reporter/json_reporter.dart';
 import '../reporter/text_reporter.dart';
 import '../rules/rule.dart';
 import '../rules/rule_registry.dart';
@@ -22,6 +23,11 @@ class DetectCommand extends Command<int> {
           abbr: 's',
           help: 'Minimum severity to report (error|warning|info)',
           defaultsTo: 'info')
+      ..addOption('format',
+          abbr: 'f',
+          allowed: ['text', 'json'],
+          help: 'Output format',
+          defaultsTo: 'text')
       ..addFlag('no-color',
           help: 'Disable ANSI colors', negatable: false);
   }
@@ -39,6 +45,7 @@ class DetectCommand extends Command<int> {
     final severityStr = argResults!['severity'] as String;
     final minSeverity = RuleSeverity.fromJson(severityStr);
     final noColor = argResults!['no-color'] as bool;
+    final format = argResults!['format'] as String;
 
     final engine = Engine(registry: RuleRegistry.defaults());
     final findings = engine
@@ -46,8 +53,12 @@ class DetectCommand extends Command<int> {
         .where((f) => f.severity.index <= minSeverity.index)
         .toList();
 
-    final reporter = TextReporter(useColor: !noColor);
-    stdout.write(reporter.render(findings));
+    final output = switch (format) {
+      'json' => const JsonReporter().render(findings),
+      _ => TextReporter(useColor: !noColor).render(findings),
+    };
+    stdout.write(output);
+    if (format == 'json' && !output.endsWith('\n')) stdout.writeln();
 
     return findings.isEmpty ? 0 : 1;
   }
