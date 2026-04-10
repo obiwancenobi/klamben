@@ -141,7 +141,7 @@ lib/screens/home.dart
 klamben/
 ├── src/                     # CANONICAL SOURCE OF TRUTH
 │   ├── skill/               # 1 SKILL.md + 7 reference modules
-│   ├── commands/            # 21 slash command definitions
+│   ├── commands/            # 28 slash command definitions
 │   └── rules/rules.json    # 24 anti-pattern rule contract
 ├── tool/                    # Build script (Dart)
 │   └── build.dart           # Fans out src/ → build/<harness>/
@@ -170,7 +170,7 @@ cd klamben
 cd tool && dart pub get && cd ..
 dart run tool/build.dart           # regenerate build/
 dart run tool/build.dart --verify  # CI check: exits non-zero if stale
-cd tool && dart test               # 8 build tests
+cd tool && dart test               # 15 build + install tests
 
 # CLI
 cd ../cli && dart pub get
