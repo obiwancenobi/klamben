@@ -12,6 +12,9 @@ Generate a production-grade form.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. Use `Form` + `GlobalKey<FormState>` for validation
 2. `TextFormField` per field with `validator`
 3. Correct `keyboardType` per field (email, number, phone, multiline)

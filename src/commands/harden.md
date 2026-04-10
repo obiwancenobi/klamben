@@ -19,6 +19,9 @@ generated code misses.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. **Loading states:** Any async button/action gets a `_loading` flag
    and disabled-while-loading UI
 2. **Error states:** Wrap async calls in try/catch; show user-facing

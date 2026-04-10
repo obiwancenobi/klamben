@@ -18,6 +18,9 @@ Scan Flutter code for anti-patterns. Read-only — never modifies files.
 
 ## Process
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. Load the full rule catalog from `src/rules/rules.json` (or equivalent
    in the installed project)
 2. For the target path (default: current file or `lib/`), walk every
