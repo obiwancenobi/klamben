@@ -28,8 +28,7 @@ class DetectCommand extends Command<int> {
           allowed: ['text', 'json'],
           help: 'Output format',
           defaultsTo: 'text')
-      ..addFlag('no-color',
-          help: 'Disable ANSI colors', negatable: false);
+      ..addFlag('no-color', help: 'Disable ANSI colors', negatable: false);
   }
 
   @override

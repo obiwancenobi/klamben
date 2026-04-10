@@ -43,8 +43,7 @@ class RuleCatalog {
     final parsed = <RuleMetadata>[];
     for (final entry in rules) {
       final map = entry as Map<String, dynamic>;
-      final examples =
-          (map['examples'] as Map<String, dynamic>? ?? const {});
+      final examples = (map['examples'] as Map<String, dynamic>? ?? const {});
       parsed.add(RuleMetadata(
         id: map['id'] as String,
         category: RuleCategory.fromJson(map['category'] as String),
@@ -53,8 +52,8 @@ class RuleCatalog {
         description: map['description'] as String? ?? '',
         rationale: map['rationale'] as String? ?? '',
         fixHint: map['fix_hint'] as String? ?? '',
-        references: ((map['references'] as List<dynamic>?) ?? const [])
-            .cast<String>(),
+        references:
+            ((map['references'] as List<dynamic>?) ?? const []).cast<String>(),
         badExample: examples['bad'] as String? ?? '',
         goodExample: examples['good'] as String? ?? '',
       ));

@@ -30,8 +30,8 @@ Widget c() => Container(color: Colors.transparent);
       expect(findings.length, 2,
           reason:
               'expected findings for Colors.purple and Color(0xFF...), got $findings');
-      expect(findings.every((f) => f.ruleId == 'visual/hardcoded-color'),
-          isTrue);
+      expect(
+          findings.every((f) => f.ruleId == 'visual/hardcoded-color'), isTrue);
     });
   });
 }

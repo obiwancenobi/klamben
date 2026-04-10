@@ -7,8 +7,7 @@ void main() {
     final engine = Engine(registry: RuleRegistry.defaults());
 
     test('bad fixture triggers one finding per seed rule', () {
-      final findings =
-          engine.detect('test/fixtures/bad/all_violations.dart');
+      final findings = engine.detect('test/fixtures/bad/all_violations.dart');
       final ids = findings.map((f) => f.ruleId).toSet();
       expect(
           ids,
@@ -25,8 +24,7 @@ void main() {
     test('good fixture triggers no findings', () {
       final findings = engine.detect('test/fixtures/good/clean.dart');
       expect(findings, isEmpty,
-          reason:
-              'clean fixture should not trigger any rule. Got: $findings');
+          reason: 'clean fixture should not trigger any rule. Got: $findings');
     });
   });
 }

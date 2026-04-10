@@ -37,8 +37,7 @@ class _Visitor extends RecursiveAstVisitor<void> {
 
   @override
   void visitPrefixedIdentifier(PrefixedIdentifier node) {
-    if (node.prefix.name == 'Colors' &&
-        node.identifier.name != 'transparent') {
+    if (node.prefix.name == 'Colors' && node.identifier.name != 'transparent') {
       _add(node.offset,
           'Use ColorScheme semantic token instead of Colors.${node.identifier.name}');
     }

@@ -33,8 +33,7 @@ class TextReporter {
         findings.where((f) => f.severity == RuleSeverity.error).length;
     final warnings =
         findings.where((f) => f.severity == RuleSeverity.warning).length;
-    final infos =
-        findings.where((f) => f.severity == RuleSeverity.info).length;
+    final infos = findings.where((f) => f.severity == RuleSeverity.info).length;
 
     buf.write('${findings.length} issues (');
     final parts = <String>[];
@@ -44,8 +43,7 @@ class TextReporter {
     }
     if (infos > 0) parts.add('$infos info');
     buf.write(parts.join(', '));
-    buf.writeln(
-        ') in ${byFile.length} file${byFile.length == 1 ? '' : 's'}.');
+    buf.writeln(') in ${byFile.length} file${byFile.length == 1 ? '' : 's'}.');
 
     return buf.toString();
   }

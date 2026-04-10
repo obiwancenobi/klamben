@@ -28,8 +28,7 @@ Widget c() => Scaffold(body: SafeArea(child: Column(children: const [Text('x')])
           ))
           .toList();
       expect(findings.length, 1,
-          reason:
-              'only the naked Scaffold should be flagged, got $findings');
+          reason: 'only the naked Scaffold should be flagged, got $findings');
       expect(findings.first.ruleId, 'layout/missing-safearea');
     });
   });
