@@ -52,6 +52,20 @@ void main() {
           reason: 'verify should succeed after fresh build: ${result.stderr}');
     });
 
+    test('build generates cli/lib/src/rules_data.dart', () async {
+      await Process.run('dart', ['run', 'tool/build.dart'],
+          workingDirectory: _repoRoot());
+
+      final generated = File('${_repoRoot()}/cli/lib/src/rules_data.dart');
+      expect(generated.existsSync(), isTrue,
+          reason: 'expected rules_data.dart to be generated');
+      final content = generated.readAsStringSync();
+      expect(content, contains('const rulesJson'),
+          reason: 'expected const rulesJson declaration');
+      expect(content, contains('visual/hardcoded-color'),
+          reason: 'expected rule ID from rules.json in generated data');
+    });
+
     test('--verify exits nonzero when build is stale', () async {
       // Fresh build
       await Process.run('dart', ['run', 'tool/build.dart'],

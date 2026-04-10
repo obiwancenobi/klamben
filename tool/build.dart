@@ -49,7 +49,60 @@ Future<void> main(List<String> args) async {
     await _buildHarness(h, verify: verify);
   }
 
+  if (verify) {
+    await _verifyRulesData();
+  } else {
+    await _generateRulesData();
+  }
+
   stdout.writeln('OK');
+}
+
+String _buildRulesDataContent(String rulesJson) {
+  return '// GENERATED FILE — DO NOT EDIT.\n'
+      '// Source: src/rules/rules.json\n'
+      '// Regenerate: dart run tool/build.dart\n'
+      '\n'
+      "const rulesJson = r'''\n"
+      '$rulesJson'
+      "''';\n";
+}
+
+Future<void> _generateRulesData() async {
+  final rulesFile = File(p.join(repoRoot, srcRulesFile));
+  final rulesJsonText = await rulesFile.readAsString();
+
+  if (rulesJsonText.contains("'''")) {
+    stderr.writeln(
+        'rules.json contains triple-single-quote; cannot embed as raw string');
+    exit(2);
+  }
+
+  final outPath = p.join(repoRoot, 'cli', 'lib', 'src', 'rules_data.dart');
+  final out = _buildRulesDataContent(rulesJsonText);
+
+  final file = File(outPath);
+  file.parent.createSync(recursive: true);
+  await file.writeAsString(out);
+  stdout.writeln('  generated: $outPath');
+}
+
+Future<void> _verifyRulesData() async {
+  final rulesFile = File(p.join(repoRoot, srcRulesFile));
+  final rulesJsonText = await rulesFile.readAsString();
+  final expected = _buildRulesDataContent(rulesJsonText);
+
+  final outPath = p.join(repoRoot, 'cli', 'lib', 'src', 'rules_data.dart');
+  final file = File(outPath);
+  if (!file.existsSync()) {
+    stderr.writeln('MISSING: $outPath');
+    exit(2);
+  }
+  final actual = await file.readAsString();
+  if (actual != expected) {
+    stderr.writeln('STALE: $outPath');
+    exit(2);
+  }
 }
 
 Future<void> _buildHarness(HarnessSpec h, {required bool verify}) async {
