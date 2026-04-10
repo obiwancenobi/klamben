@@ -35,13 +35,17 @@ void main() {
       }
     });
 
-    test('placeholder: report missing rules (informational only)', () {
+    test('every JSON rule has a Dart implementation', () {
       final missing = jsonIds.difference(dartIds).toList()..sort();
-      if (missing.isNotEmpty) {
-        // ignore: avoid_print
-        print(
-            'INFO: ${missing.length} rules in rules.json lack Dart impl: $missing');
-      }
+      expect(missing, isEmpty,
+          reason: 'JSON rules missing Dart impl: $missing');
+    });
+
+    test('exactly 24 rules registered', () {
+      expect(registry.rules.length, 24,
+          reason: 'expected 24 rules, got ${registry.rules.length}');
+      expect(jsonIds.length, 24,
+          reason: 'expected 24 JSON rules, got ${jsonIds.length}');
     });
   });
 }
