@@ -3,57 +3,55 @@
 Flutter mobile design skill for AI code assistants. A Flutter-flavored
 clone of [impeccable](https://github.com/pbakaus/impeccable).
 
-Teaches AI harnesses (Claude Code today; more harnesses in future
-sub-plans) to generate Flutter code that avoids AI slop patterns:
-hardcoded `Colors.purple`, missing `SafeArea`, nested
-`Container > Padding > Container`, Material widgets on iOS paths,
-missing `const`, missing semantic labels, and more.
+1 skill, 21 commands, 24 anti-pattern rules, 1 CLI detector — for
+Flutter mobile apps. Distributed to 10 AI harnesses.
+
+## The problem
+
+All LLMs trained on the same Flutter templates produce the same slop:
+`Colors.purple`, missing `SafeArea`, nested `Container > Padding > Container`,
+Material widgets on iOS paths, missing `const`, no semantic labels,
+`EdgeInsets.all(17)`, empty `catch` blocks, and more.
+
+**klamben** teaches AI code assistants to avoid these patterns with
+explicit rules, reference modules, and slash commands.
 
 ## What's inside
 
-- **1 skill** with 7 reference modules:
-  - [Typography](src/skill/references/typography.md)
-  - [Color](src/skill/references/color.md)
-  - [Spacing](src/skill/references/spacing.md)
-  - [Motion](src/skill/references/motion.md)
-  - [Interaction](src/skill/references/interaction.md)
-  - [Responsive](src/skill/references/responsive.md)
-  - [UX Writing](src/skill/references/ux-writing.md)
+### Skill + 7 reference modules
 
-- **21 slash commands:**
-  - Assessment: `/audit`, `/critique`, `/check-a11y`, `/check-platform`
-  - Refinement: `/normalize`, `/polish`, `/distill`, `/harden`
-  - Enhancement: `/animate`, `/colorize`, `/typeset`, `/arrange`,
-    `/delight`, `/optimize`
-  - Specialized: `/adapt`, `/theme-init`, `/widgetize`, `/localize`,
-    `/form`, `/empty-state`, `/icon-set`
+One skill with Flutter-first design guidance across:
 
-- **24 anti-pattern rules** in [`src/rules/rules.json`](src/rules/rules.json),
-  covering visual, layout, platform, and code-quality categories.
+| Module | Covers |
+|--------|--------|
+| [Typography](src/skill/references/typography.md) | TextTheme, Material 3 type scale, google_fonts, line-height |
+| [Color](src/skill/references/color.md) | ColorScheme.fromSeed, semantic tokens, dark mode, gradients |
+| [Spacing](src/skill/references/spacing.md) | 4/8pt grid, EdgeInsets, SafeArea, widget economy, elevation |
+| [Motion](src/skill/references/motion.md) | AnimationController, Curves, Hero, implicit animations |
+| [Interaction](src/skill/references/interaction.md) | Buttons, touch targets, haptics, async safety, error handling |
+| [Responsive](src/skill/references/responsive.md) | LayoutBuilder, breakpoints, Flex children, overflow guards |
+| [UX Writing](src/skill/references/ux-writing.md) | Button labels, errors, empty states, i18n/ARB |
 
-## CLI detector (`klamben`)
+### 21 slash commands
 
-Scan any Flutter project for anti-patterns without an AI harness:
+| Category | Commands |
+|----------|----------|
+| **Assessment** (read-only) | `/audit` `/critique` `/check-a11y` `/check-platform` |
+| **Refinement** (edits code) | `/normalize` `/polish` `/distill` `/harden` |
+| **Enhancement** | `/animate` `/colorize` `/typeset` `/arrange` `/delight` `/optimize` |
+| **Specialized** | `/adapt` `/theme-init` `/widgetize` `/localize` `/form` `/empty-state` `/icon-set` |
 
-````bash
-# From the klamben repo
-cd cli && dart pub global activate --source path .
+### 24 anti-pattern rules
 
-# In your Flutter project
-klamben detect lib/
-klamben list-rules
-klamben explain visual/hardcoded-color
-klamben detect --format=json lib/ > findings.json
-````
+Defined in [`src/rules/rules.json`](src/rules/rules.json). Each rule
+has an ID, category, severity, rationale, and good/bad examples.
 
-Exit codes:
-
-- `0` — no findings
-- `1` — one or more findings
-- `2` — tool error (bad path, invalid rule ID)
-
-The CLI ships all 24 rules across visual, layout, platform, and
-code-quality categories.
+| Category | Rules |
+|----------|-------|
+| **Visual** (7) | hardcoded-color, roboto-default, gradient-abuse, pure-black-text, nested-cards, shadow-overuse, inline-textstyle |
+| **Layout** (6) | missing-safearea, nested-padding, magic-numbers, hardcoded-width, no-flexible, fixed-row-overflow |
+| **Platform** (4) | missing-adaptive, material-on-ios, cupertino-on-android, wrong-nav-pattern |
+| **Code Quality** (7) | missing-const, missing-semantics, missing-dispose, hardcoded-strings, setstate-after-async, missing-key, swallowed-errors |
 
 ## Install (AI harness)
 
@@ -63,42 +61,102 @@ Copy the generated folder for your harness into your Flutter project:
 git clone https://github.com/obiwancenobi/klamben.git ~/klamben
 
 # Pick your harness:
-cp -r ~/klamben/build/.claude  /path/to/flutter-app/.claude     # Claude Code
-cp -r ~/klamben/build/.cursor  /path/to/flutter-app/.cursor     # Cursor
-cp -r ~/klamben/build/.gemini  /path/to/flutter-app/.gemini     # Gemini CLI
-cp -r ~/klamben/build/.codex   /path/to/flutter-app/.codex      # Codex CLI
-cp -r ~/klamben/build/.opencode /path/to/flutter-app/.opencode  # OpenCode
-cp -r ~/klamben/build/.kiro    /path/to/flutter-app/.kiro       # Kiro
-cp -r ~/klamben/build/.trae    /path/to/flutter-app/.trae       # Trae
-cp -r ~/klamben/build/.rovo    /path/to/flutter-app/.rovo       # Rovo Dev
-cp -r ~/klamben/build/.copilot /path/to/flutter-app/.copilot    # VS Code Copilot
-cp -r ~/klamben/build/.pi      /path/to/flutter-app/.pi         # Pi
+cp -r ~/klamben/build/.claude  your-flutter-app/.claude     # Claude Code
+cp -r ~/klamben/build/.cursor  your-flutter-app/.cursor     # Cursor
+cp -r ~/klamben/build/.gemini  your-flutter-app/.gemini     # Gemini CLI
+cp -r ~/klamben/build/.codex   your-flutter-app/.codex      # Codex CLI
+cp -r ~/klamben/build/.opencode your-flutter-app/.opencode  # OpenCode
+cp -r ~/klamben/build/.kiro    your-flutter-app/.kiro       # Kiro
+cp -r ~/klamben/build/.trae    your-flutter-app/.trae       # Trae
+cp -r ~/klamben/build/.rovo    your-flutter-app/.rovo       # Rovo Dev
+cp -r ~/klamben/build/.copilot your-flutter-app/.copilot    # VS Code Copilot
+cp -r ~/klamben/build/.pi      your-flutter-app/.pi         # Pi
 ```
 
-Open your Flutter project in the AI harness. The skill auto-activates
+Open your Flutter project in the harness. The skill auto-activates
 for `.dart` files. Invoke commands with `/audit`, `/polish`, etc.
 
-## Develop klamben itself
+## CLI detector
+
+Standalone Dart CLI that scans Flutter projects for anti-patterns
+without an AI harness. All 24 rules, text or JSON output.
+
+```bash
+# Install from source
+cd ~/klamben/cli && dart pub global activate --source path .
+
+# Scan your project
+klamben detect lib/
+klamben detect --format=json lib/ > findings.json
+klamben detect --severity=error lib/
+
+# Explore rules
+klamben list-rules
+klamben explain visual/hardcoded-color
+```
+
+**Exit codes:** `0` no findings, `1` findings present, `2` tool error.
+
+**Example output:**
+
+```
+lib/screens/home.dart
+  11:15  warning  visual/hardcoded-color      Use ColorScheme semantic token instead of Colors.purple
+  24:7   error    layout/missing-safearea     Scaffold body without SafeArea or AppBar
+  47:3   info     code-quality/missing-const  Text widget can be const
+
+3 issues (1 error, 1 warning, 1 info) in 1 file.
+```
+
+## Architecture
+
+```
+klamben/
+├── src/                     # CANONICAL SOURCE OF TRUTH
+│   ├── skill/               # 1 SKILL.md + 7 reference modules
+│   ├── commands/            # 21 slash command definitions
+│   └── rules/rules.json    # 24 anti-pattern rule contract
+├── tool/                    # Build script (Dart)
+│   └── build.dart           # Fans out src/ → build/<harness>/
+├── build/                   # GENERATED (committed, do not edit)
+│   ├── .claude/             # Claude Code layout
+│   ├── .cursor/             # Cursor layout (.mdc extension)
+│   ├── .gemini/ .codex/ .opencode/ .kiro/
+│   ├── .trae/ .rovo/ .copilot/ .pi/
+├── cli/                     # Dart CLI detector package
+│   ├── lib/src/rules/       # 24 rule implementations
+│   ├── lib/src/reporter/    # text + JSON output
+│   └── test/                # 72 tests
+```
+
+**Single source of truth:** edit `src/`, run `dart run tool/build.dart`,
+all 10 harness folders regenerate. `rules.json` is the contract shared
+between the skill markdown, CLI detector, and build script.
+
+## Develop
 
 ```bash
 git clone https://github.com/obiwancenobi/klamben.git
 cd klamben
+
+# Build script
 cd tool && dart pub get && cd ..
+dart run tool/build.dart           # regenerate build/
+dart run tool/build.dart --verify  # CI check: exits non-zero if stale
+cd tool && dart test               # 8 build tests
 
-# Regenerate build/ from src/
-dart run tool/build.dart
-
-# Verify build is current
-dart run tool/build.dart --verify
-
-# Run build tests
-cd tool && dart test
+# CLI
+cd ../cli && dart pub get
+dart test                          # 72 tests
+dart analyze lib/ test/ bin/       # static analysis
 ```
 
 ## Contributing
 
-Edit canonical files under `src/` — never edit `build/` directly.
-Then run `dart run tool/build.dart` to regenerate.
+1. Edit canonical files under `src/` — never edit `build/` directly
+2. Run `dart run tool/build.dart` to regenerate
+3. Run tests: `cd tool && dart test && cd ../cli && dart test`
+4. Format: `dart format tool/ && cd cli && dart format lib/ test/ bin/`
 
 ## License
 
