@@ -1,8 +1,26 @@
 // cli/bin/klamben.dart
-//
-// klamben CLI entry point. Argument parsing and subcommand dispatch
-// are filled in by Task 11.
-// ignore_for_file: avoid_print
-void main(List<String> args) {
-  print('klamben CLI — not yet implemented');
+
+import 'dart:io';
+
+import 'package:args/command_runner.dart';
+import 'package:klamben/src/commands/detect_command.dart';
+import 'package:klamben/src/commands/explain_command.dart';
+import 'package:klamben/src/commands/list_rules_command.dart';
+
+Future<void> main(List<String> args) async {
+  final runner = CommandRunner<int>(
+    'klamben',
+    'Flutter design anti-pattern detector.',
+  )
+    ..addCommand(DetectCommand())
+    ..addCommand(ListRulesCommand())
+    ..addCommand(ExplainCommand());
+
+  try {
+    final code = await runner.run(args) ?? 0;
+    exit(code);
+  } on UsageException catch (e) {
+    stderr.writeln(e);
+    exit(64);
+  }
 }
