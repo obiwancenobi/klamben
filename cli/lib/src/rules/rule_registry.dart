@@ -1,6 +1,7 @@
 // cli/lib/src/rules/rule_registry.dart
 
 import 'layout/missing_safearea.dart';
+import 'platform/missing_adaptive.dart';
 import 'rule.dart';
 import 'visual/hardcoded_color.dart';
 
@@ -15,6 +16,7 @@ class RuleRegistry {
     return RuleRegistry._([
       HardcodedColorRule(),
       MissingSafeAreaRule(),
+      MissingAdaptiveRule(),
     ]);
   }
 
