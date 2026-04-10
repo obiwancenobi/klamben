@@ -1,7 +1,7 @@
 ---
-name: arrange
-description: Fix layout — responsive breakpoints, SafeArea, LayoutBuilder, overflow guards.
-trigger: /arrange [path]
+name: layout
+description: Fix layout, spacing, and visual rhythm — responsive breakpoints, SafeArea, LayoutBuilder, overflow guards.
+trigger: /layout [path]
 reads: [rules/rules.json, skill/references/responsive.md, skill/references/spacing.md]
 writes: true
 ---

@@ -29,7 +29,7 @@ void main() {
       expect(skill.existsSync(), isTrue);
 
       final cmds = Directory(p.join(tmpDir.path, '.claude', 'commands'));
-      expect(cmds.listSync().whereType<File>().length, 22);
+      expect(cmds.listSync().whereType<File>().length, 28);
 
       final manifest =
           File(p.join(tmpDir.path, '.claude', '.klamben-manifest.json'));
@@ -37,7 +37,7 @@ void main() {
 
       final data =
           json.decode(manifest.readAsStringSync()) as Map<String, dynamic>;
-      expect(data['files'], hasLength(30));
+      expect(data['files'], hasLength(36));
     });
 
     test('preserves existing non-klamben files', () async {

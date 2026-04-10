@@ -27,15 +27,15 @@ void main() {
           reason: 'expected 7 reference modules, got ${files.length}');
     });
 
-    test('claude harness writes 22 command files', () async {
+    test('claude harness writes 28 command files', () async {
       await Process.run('dart', ['run', 'tool/build.dart'],
           workingDirectory: _repoRoot());
 
       final cmdDir = Directory('${_repoRoot()}/build/.claude/commands');
       expect(cmdDir.existsSync(), isTrue);
       final files = cmdDir.listSync().whereType<File>().toList();
-      expect(files.length, 22,
-          reason: 'expected 22 commands, got ${files.length}');
+      expect(files.length, 28,
+          reason: 'expected 28 commands, got ${files.length}');
     });
 
     test('--verify exits 0 when build is fresh', () async {
@@ -103,8 +103,8 @@ void main() {
           .whereType<File>()
           .where((f) => f.path.endsWith('.mdc'))
           .toList();
-      expect(mdcFiles.length, 22,
-          reason: 'expected 22 .mdc command files in cursor');
+      expect(mdcFiles.length, 28,
+          reason: 'expected 28 .mdc command files in cursor');
     });
 
     test('--verify exits nonzero when build is stale', () async {

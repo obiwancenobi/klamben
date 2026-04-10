@@ -3,7 +3,7 @@
 Flutter mobile design skill for AI code assistants. A Flutter-flavored
 clone of [impeccable](https://github.com/pbakaus/impeccable).
 
-1 skill, 22 commands, 24 anti-pattern rules, 1 CLI detector — for
+1 skill, 28 commands, 24 anti-pattern rules, 1 CLI detector — for
 Flutter mobile apps. Distributed to 10 AI harnesses.
 
 ## The problem
@@ -32,14 +32,15 @@ One skill with Flutter-first design guidance across:
 | [Responsive](src/skill/references/responsive.md) | LayoutBuilder, breakpoints, Flex children, overflow guards |
 | [UX Writing](src/skill/references/ux-writing.md) | Button labels, errors, empty states, i18n/ARB |
 
-### 22 slash commands
+### 28 slash commands
 
 | Category | Commands |
 |----------|----------|
-| **Setup** | `/teach` (run once per project — scans codebase, asks UX questions, writes `.klamben.md` design context) |
+| **Setup** | `/teach` — one-time project scan + design context setup |
+| **Creation** | `/craft` — guided shape-then-build flow | `/extract` — pull tokens + components into design system |
 | **Assessment** (read-only) | `/audit` `/critique` `/check-a11y` `/check-platform` |
-| **Refinement** (edits code) | `/normalize` `/polish` `/distill` `/harden` |
-| **Enhancement** | `/animate` `/colorize` `/typeset` `/arrange` `/delight` `/optimize` |
+| **Refinement** (edits code) | `/normalize` `/polish` `/distill` `/clarify` `/harden` |
+| **Enhancement** | `/animate` `/colorize` `/typeset` `/layout` `/delight` `/optimize` `/bolder` `/quieter` `/overdrive` |
 | **Specialized** | `/adapt` `/theme-init` `/widgetize` `/localize` `/form` `/empty-state` `/icon-set` |
 
 ### 24 anti-pattern rules

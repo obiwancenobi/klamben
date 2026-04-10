@@ -66,18 +66,22 @@ When a task touches one of these areas, read the corresponding file:
 
 ## Commands
 
-Twenty-two slash commands are available. Use them as explicit entry
+Twenty-eight slash commands are available. Use them as explicit entry
 points for specific design operations:
 
 **Setup:** `/teach` (run once per project)
 
+**Creation:** `/craft` (guided shape-then-build), `/extract` (pull
+tokens + components into design system)
+
 **Assessment (read-only):** `/audit`, `/critique`, `/check-a11y`,
 `/check-platform`
 
-**Refinement:** `/normalize`, `/polish`, `/distill`, `/harden`
+**Refinement:** `/normalize`, `/polish`, `/distill`, `/clarify`,
+`/harden`
 
-**Enhancement:** `/animate`, `/colorize`, `/typeset`, `/arrange`,
-`/delight`, `/optimize`
+**Enhancement:** `/animate`, `/colorize`, `/typeset`, `/layout`,
+`/delight`, `/optimize`, `/bolder`, `/quieter`, `/overdrive`
 
 **Specialized:** `/adapt`, `/theme-init`, `/widgetize`, `/localize`,
 `/form`, `/empty-state`, `/icon-set`
