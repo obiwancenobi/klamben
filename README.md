@@ -55,23 +55,31 @@ has an ID, category, severity, rationale, and good/bad examples.
 
 ## Install (AI harness)
 
-Copy the generated folder for your harness into your Flutter project:
-
 ```bash
 git clone https://github.com/obiwancenobi/klamben.git ~/klamben
+cd ~/klamben && cd tool && dart pub get && cd ..
 
-# Pick your harness:
-cp -r ~/klamben/build/.claude  your-flutter-app/.claude     # Claude Code
-cp -r ~/klamben/build/.cursor  your-flutter-app/.cursor     # Cursor
-cp -r ~/klamben/build/.gemini  your-flutter-app/.gemini     # Gemini CLI
-cp -r ~/klamben/build/.codex   your-flutter-app/.codex      # Codex CLI
-cp -r ~/klamben/build/.opencode your-flutter-app/.opencode  # OpenCode
-cp -r ~/klamben/build/.kiro    your-flutter-app/.kiro       # Kiro
-cp -r ~/klamben/build/.trae    your-flutter-app/.trae       # Trae
-cp -r ~/klamben/build/.rovo    your-flutter-app/.rovo       # Rovo Dev
-cp -r ~/klamben/build/.copilot your-flutter-app/.copilot    # VS Code Copilot
-cp -r ~/klamben/build/.pi      your-flutter-app/.pi         # Pi
+# Install into your Flutter project (safe merge — won't overwrite existing files):
+dart run tool/install.dart ~/my-flutter-app
+
+# Specify harness explicitly:
+dart run tool/install.dart ~/my-flutter-app --harness cursor
+
+# Preview without writing:
+dart run tool/install.dart ~/my-flutter-app --dry-run
+
+# Overwrite conflicting files:
+dart run tool/install.dart ~/my-flutter-app --force
+
+# Remove klamben from a project:
+dart run tool/install.dart ~/my-flutter-app --uninstall
 ```
+
+The install script auto-detects your harness (claude, cursor, gemini,
+codex, opencode, kiro, trae, rovo, copilot, pi) from existing project
+directories. It merges klamben files without touching your existing
+skills, commands, or settings. A `.klamben-manifest.json` tracks
+installed files for clean updates and uninstalls.
 
 Open your Flutter project in the harness. The skill auto-activates
 for `.dart` files. Invoke commands with `/audit`, `/polish`, etc.
