@@ -49,13 +49,26 @@ class _Visitor extends RecursiveAstVisitor<void> {
   void visitInstanceCreationExpression(InstanceCreationExpression node) {
     final typeName = node.constructorName.type.name2.lexeme;
     if (typeName == 'Color') {
-      final args = node.argumentList.arguments;
-      if (args.length == 1 && args.first is IntegerLiteral) {
-        _add(node.offset,
-            'Use ColorScheme semantic token instead of Color(0x...)');
-      }
+      _checkColorArgs(node.argumentList, node.offset);
     }
     super.visitInstanceCreationExpression(node);
+  }
+
+  @override
+  void visitMethodInvocation(MethodInvocation node) {
+    // Without resolved types, `Color(0x...)` without `const` parses as
+    // a MethodInvocation with methodName == 'Color'.
+    if (node.target == null && node.methodName.name == 'Color') {
+      _checkColorArgs(node.argumentList, node.offset);
+    }
+    super.visitMethodInvocation(node);
+  }
+
+  void _checkColorArgs(ArgumentList argList, int offset) {
+    final args = argList.arguments;
+    if (args.length == 1 && args.first is IntegerLiteral) {
+      _add(offset, 'Use ColorScheme semantic token instead of Color(0x...)');
+    }
   }
 
   void _add(int offset, String message) {
