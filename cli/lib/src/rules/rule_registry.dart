@@ -1,7 +1,12 @@
 // cli/lib/src/rules/rule_registry.dart
 
 import 'code_quality/swallowed_errors.dart';
+import 'layout/fixed_row_overflow.dart';
+import 'layout/hardcoded_width.dart';
+import 'layout/magic_numbers.dart';
 import 'layout/missing_safearea.dart';
+import 'layout/nested_padding.dart';
+import 'layout/no_flexible.dart';
 import 'platform/missing_adaptive.dart';
 import 'rule.dart';
 import 'visual/gradient_abuse.dart';
@@ -29,6 +34,11 @@ class RuleRegistry {
       RobotoDefaultRule(),
       ShadowOveruseRule(),
       MissingSafeAreaRule(),
+      NestedPaddingRule(),
+      MagicNumbersRule(),
+      HardcodedWidthRule(),
+      NoFlexibleRule(),
+      FixedRowOverflowRule(),
       MissingAdaptiveRule(),
       SwallowedErrorsRule(),
     ]);
