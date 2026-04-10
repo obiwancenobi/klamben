@@ -66,6 +66,47 @@ void main() {
           reason: 'expected rule ID from rules.json in generated data');
     });
 
+    test('all 10 harnesses produce output directories', () async {
+      await Process.run('dart', ['run', 'tool/build.dart'],
+          workingDirectory: _repoRoot());
+
+      const harnessDirs = [
+        '.claude',
+        '.cursor',
+        '.gemini',
+        '.codex',
+        '.opencode',
+        '.kiro',
+        '.trae',
+        '.rovo',
+        '.copilot',
+        '.pi',
+      ];
+      for (final dir in harnessDirs) {
+        final d = Directory('${_repoRoot()}/build/$dir');
+        expect(d.existsSync(), isTrue, reason: 'expected build/$dir to exist');
+      }
+    });
+
+    test('cursor harness uses .mdc extension', () async {
+      await Process.run('dart', ['run', 'tool/build.dart'],
+          workingDirectory: _repoRoot());
+
+      final skill =
+          File('${_repoRoot()}/build/.cursor/rules/flutter-design.mdc');
+      expect(skill.existsSync(), isTrue,
+          reason: 'expected .cursor SKILL as .mdc');
+
+      final cmdDir = Directory('${_repoRoot()}/build/.cursor/rules/commands');
+      final mdcFiles = cmdDir
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.mdc'))
+          .toList();
+      expect(mdcFiles.length, 21,
+          reason: 'expected 21 .mdc command files in cursor');
+    });
+
     test('--verify exits nonzero when build is stale', () async {
       // Fresh build
       await Process.run('dart', ['run', 'tool/build.dart'],

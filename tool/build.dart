@@ -20,6 +20,7 @@ class HarnessSpec {
   final String skillPath; // e.g. 'skills/flutter-design/SKILL.md'
   final String referencesDir; // e.g. 'skills/flutter-design/references'
   final String commandsDir; // e.g. 'commands'
+  final String fileExt; // e.g. '.md' or '.mdc' (for cursor)
 
   const HarnessSpec({
     required this.name,
@@ -27,13 +28,88 @@ class HarnessSpec {
     required this.skillPath,
     required this.referencesDir,
     required this.commandsDir,
+    this.fileExt = '.md',
   });
 }
 
 const harnesses = <HarnessSpec>[
+  // Claude Code: skills/ + commands/ structure
   HarnessSpec(
     name: 'claude',
     rootDir: '.claude',
+    skillPath: 'skills/flutter-design/SKILL.md',
+    referencesDir: 'skills/flutter-design/references',
+    commandsDir: 'commands',
+  ),
+  // Cursor: .cursor/rules/ with .mdc extension
+  HarnessSpec(
+    name: 'cursor',
+    rootDir: '.cursor',
+    skillPath: 'rules/flutter-design.mdc',
+    referencesDir: 'rules/flutter-design-references',
+    commandsDir: 'rules/commands',
+    fileExt: '.mdc',
+  ),
+  // Gemini CLI
+  HarnessSpec(
+    name: 'gemini',
+    rootDir: '.gemini',
+    skillPath: 'skills/flutter-design/SKILL.md',
+    referencesDir: 'skills/flutter-design/references',
+    commandsDir: 'commands',
+  ),
+  // Codex CLI
+  HarnessSpec(
+    name: 'codex',
+    rootDir: '.codex',
+    skillPath: 'skills/flutter-design/SKILL.md',
+    referencesDir: 'skills/flutter-design/references',
+    commandsDir: 'commands',
+  ),
+  // OpenCode
+  HarnessSpec(
+    name: 'opencode',
+    rootDir: '.opencode',
+    skillPath: 'skills/flutter-design/SKILL.md',
+    referencesDir: 'skills/flutter-design/references',
+    commandsDir: 'commands',
+  ),
+  // Kiro
+  HarnessSpec(
+    name: 'kiro',
+    rootDir: '.kiro',
+    skillPath: 'skills/flutter-design/SKILL.md',
+    referencesDir: 'skills/flutter-design/references',
+    commandsDir: 'commands',
+  ),
+  // Trae
+  HarnessSpec(
+    name: 'trae',
+    rootDir: '.trae',
+    skillPath: 'skills/flutter-design/SKILL.md',
+    referencesDir: 'skills/flutter-design/references',
+    commandsDir: 'commands',
+  ),
+  // Rovo Dev
+  HarnessSpec(
+    name: 'rovo',
+    rootDir: '.rovo',
+    skillPath: 'skills/flutter-design/SKILL.md',
+    referencesDir: 'skills/flutter-design/references',
+    commandsDir: 'commands',
+  ),
+  // VS Code Copilot
+  HarnessSpec(
+    name: 'copilot',
+    rootDir: '.copilot',
+    skillPath: 'skills/flutter-design/SKILL.md',
+    referencesDir: 'skills/flutter-design/references',
+    commandsDir: 'commands',
+  ),
+  // Pi
+  HarnessSpec(
+    name: 'pi',
+    rootDir: '.pi',
     skillPath: 'skills/flutter-design/SKILL.md',
     referencesDir: 'skills/flutter-design/references',
     commandsDir: 'commands',
@@ -153,7 +229,7 @@ Future<Map<String, String>> _computeFiles(HarnessSpec h) async {
   refEntries.sort((a, b) => a.path.compareTo(b.path));
   for (final entity in refEntries) {
     if (!entity.path.endsWith('.md')) continue;
-    final basename = p.basename(entity.path);
+    final basename = _renameExt(p.basename(entity.path), h.fileExt);
     final outPath = p.join(h.referencesDir, basename);
     files[outPath] = await entity.readAsString();
   }
@@ -164,10 +240,17 @@ Future<Map<String, String>> _computeFiles(HarnessSpec h) async {
   cmdEntries.sort((a, b) => a.path.compareTo(b.path));
   for (final entity in cmdEntries) {
     if (!entity.path.endsWith('.md')) continue;
-    final basename = p.basename(entity.path);
+    final basename = _renameExt(p.basename(entity.path), h.fileExt);
     final outPath = p.join(h.commandsDir, basename);
     files[outPath] = await entity.readAsString();
   }
 
   return files;
+}
+
+/// Rename a file's extension if the harness uses a different one.
+/// e.g. `audit.md` → `audit.mdc` when fileExt is `.mdc`.
+String _renameExt(String filename, String targetExt) {
+  if (targetExt == '.md') return filename;
+  return p.withoutExtension(filename) + targetExt;
 }

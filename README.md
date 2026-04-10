@@ -52,22 +52,30 @@ Exit codes:
 - `1` — one or more findings
 - `2` — tool error (bad path, invalid rule ID)
 
-**Note:** The CLI currently ships with 4 seed rules (one per category).
-The full 24-rule coverage will be added in a later sub-plan.
+The CLI ships all 24 rules across visual, layout, platform, and
+code-quality categories.
 
-## Install (Claude Code)
+## Install (AI harness)
 
-From the root of your Flutter project:
+Copy the generated folder for your harness into your Flutter project:
 
 ```bash
-# Clone klamben somewhere
 git clone https://github.com/obiwancenobi/klamben.git ~/klamben
 
-# Copy the generated .claude/ folder into your Flutter project
-cp -r ~/klamben/build/.claude /path/to/your/flutter-app/.claude
+# Pick your harness:
+cp -r ~/klamben/build/.claude  /path/to/flutter-app/.claude     # Claude Code
+cp -r ~/klamben/build/.cursor  /path/to/flutter-app/.cursor     # Cursor
+cp -r ~/klamben/build/.gemini  /path/to/flutter-app/.gemini     # Gemini CLI
+cp -r ~/klamben/build/.codex   /path/to/flutter-app/.codex      # Codex CLI
+cp -r ~/klamben/build/.opencode /path/to/flutter-app/.opencode  # OpenCode
+cp -r ~/klamben/build/.kiro    /path/to/flutter-app/.kiro       # Kiro
+cp -r ~/klamben/build/.trae    /path/to/flutter-app/.trae       # Trae
+cp -r ~/klamben/build/.rovo    /path/to/flutter-app/.rovo       # Rovo Dev
+cp -r ~/klamben/build/.copilot /path/to/flutter-app/.copilot    # VS Code Copilot
+cp -r ~/klamben/build/.pi      /path/to/flutter-app/.pi         # Pi
 ```
 
-Open your Flutter project in Claude Code. The skill auto-activates
+Open your Flutter project in the AI harness. The skill auto-activates
 for `.dart` files. Invoke commands with `/audit`, `/polish`, etc.
 
 ## Develop klamben itself
