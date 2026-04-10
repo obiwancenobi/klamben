@@ -109,6 +109,19 @@ All other commands (`/audit`, `/polish`, `/colorize`, etc.) read
 `.klamben.md` for project-specific guidance. Without it, commands
 still work but give generic Flutter advice.
 
+## Update
+
+```bash
+cd ~/klamben && git pull
+
+# Re-install into your Flutter project to pick up changes:
+dart run tool/install.dart ~/my-flutter-app
+```
+
+The install script detects previously installed files via
+`.klamben-manifest.json` and updates them automatically without
+touching your custom files.
+
 ## CLI detector
 
 Standalone Dart CLI that scans Flutter projects for anti-patterns
