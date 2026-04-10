@@ -1,5 +1,11 @@
 // cli/lib/src/rules/rule_registry.dart
 
+import 'code_quality/hardcoded_strings.dart';
+import 'code_quality/missing_const.dart';
+import 'code_quality/missing_dispose.dart';
+import 'code_quality/missing_key.dart';
+import 'code_quality/missing_semantics.dart';
+import 'code_quality/setstate_after_async.dart';
 import 'code_quality/swallowed_errors.dart';
 import 'layout/fixed_row_overflow.dart';
 import 'layout/hardcoded_width.dart';
@@ -47,6 +53,12 @@ class RuleRegistry {
       CupertinoOnAndroidRule(),
       WrongNavPatternRule(),
       SwallowedErrorsRule(),
+      MissingConstRule(),
+      MissingSemanticsRule(),
+      MissingDisposeRule(),
+      HardcodedStringsRule(),
+      SetStateAfterAsyncRule(),
+      MissingKeyRule(),
     ]);
   }
 
