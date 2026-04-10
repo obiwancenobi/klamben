@@ -19,6 +19,9 @@ surface.
 
 ## Checks
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. **Semantic labels** — IconButton without tooltip, Image.asset
    without Semantics label, tappable Container without accessible name
 2. **Touch targets** — Interactive elements <48dp/44pt

@@ -18,6 +18,9 @@ Last-mile cleanup before shipping. Only safe, mechanical changes.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. Add `const` to every eligible constructor (respects
    `prefer_const_constructors` lint)
 2. Add `key: ValueKey(...)` to list children that lack keys

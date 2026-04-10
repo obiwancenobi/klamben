@@ -9,6 +9,22 @@ You are working in a Flutter mobile project. Apply the rules below to
 every widget you create, read, or modify. When the user asks for UI
 work, read the relevant reference module first.
 
+## Getting started
+
+Run `/teach` once when you first add klamben to a project. It scans
+your codebase and asks a few questions to build a design context file
+(`.klamben.md`). All other commands reference this context for
+project-specific guidance.
+
+If `.klamben.md` doesn't exist, commands still work but give generic
+Flutter advice instead of project-tailored suggestions.
+
+## Design context
+
+Before doing any UI work, check if `.klamben.md` exists in the project
+root. If it does, read it and apply the project's brand, platform
+targets, accessibility tier, and existing patterns to your work.
+
 ## Core principles
 
 1. **Theme over hardcode.** Never write `Colors.purple`, `Color(0xFF...)`,
@@ -50,8 +66,10 @@ When a task touches one of these areas, read the corresponding file:
 
 ## Commands
 
-Twenty-one slash commands are available. Use them as explicit entry
+Twenty-two slash commands are available. Use them as explicit entry
 points for specific design operations:
+
+**Setup:** `/teach` (run once per project)
 
 **Assessment (read-only):** `/audit`, `/critique`, `/check-a11y`,
 `/check-platform`

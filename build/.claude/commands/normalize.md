@@ -19,6 +19,9 @@ Hoist hardcoded values into theme. Edits files.
 
 ## Process
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. Find hardcoded colors (`Colors.X`, `Color(0xFF...)`)
    - Replace with `Theme.of(context).colorScheme.<semantic>`
    - If no semantic exists in the current theme, add it to the theme

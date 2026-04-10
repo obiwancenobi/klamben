@@ -19,6 +19,9 @@ review.
 
 ## Process
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. Read the target widget file
 2. Build a mental model of the rendered layout (visual hierarchy, grouping, flow)
 3. Apply principles from `skill/references/` (especially spacing,

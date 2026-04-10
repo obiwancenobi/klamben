@@ -12,6 +12,9 @@ Add the three missing states to a screen: empty, error, loading.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. **Empty:** Centered icon + title + body + optional CTA
 2. **Error:** Centered error icon + title + body + retry button
 3. **Loading:** Skeleton loader (matches content shape) OR centered spinner

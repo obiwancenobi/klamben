@@ -18,6 +18,9 @@ Collapse redundant widgets and extract duplication.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. **Flatten redundant wrappers:**
    - `Padding > Container > Padding` → single `Container(padding: ...)`
    - `Container > Center > Text` → `Container(alignment: Alignment.center, child: Text)`

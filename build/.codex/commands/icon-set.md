@@ -18,6 +18,9 @@ Replace default Icons.* with a coherent icon set.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. Add the chosen icon package to `pubspec.yaml`
 2. Walk target path, replace `Icon(Icons.X)` with the new package's
    equivalent (ask user if ambiguous)

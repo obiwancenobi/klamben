@@ -12,6 +12,9 @@ Add i18n scaffolding to a project that doesn't have it.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. Add `flutter_localizations` and `intl` to `pubspec.yaml`
 2. Set `flutter: generate: true`
 3. Create `l10n.yaml` with ARB paths

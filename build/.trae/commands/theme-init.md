@@ -12,6 +12,9 @@ Generate a theme scaffold for a new project.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. Create `lib/theme/app_theme.dart` with:
    - `ColorScheme.fromSeed` for light and dark
    - `TextTheme` via `google_fonts` (ask user for font; default Inter)

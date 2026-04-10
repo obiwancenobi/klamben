@@ -17,6 +17,9 @@ Add motion to a static screen. Restraint-first.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. **Implicit animations first:** `AnimatedContainer`, `AnimatedOpacity`,
    `AnimatedSwitcher` for single-property changes
 2. **Hero transitions:** Matching pairs across navigation

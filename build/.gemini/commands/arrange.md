@@ -19,6 +19,9 @@ Fix broken layout.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. **SafeArea:** Wrap `Scaffold` body if no `AppBar`
 2. **Flex children:** Wrap variable-content `Row`/`Column` children
    in `Flexible`/`Expanded`

@@ -18,6 +18,9 @@ Micro-interactions that make an app feel alive. Subtle only.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. **Haptics** on state-changing buttons (`HapticFeedback.lightImpact`)
 2. **Skeleton loaders** for list/grid loading states
 3. **Pull-to-refresh** on scrollable lists (`RefreshIndicator` /

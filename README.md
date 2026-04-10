@@ -3,7 +3,7 @@
 Flutter mobile design skill for AI code assistants. A Flutter-flavored
 clone of [impeccable](https://github.com/pbakaus/impeccable).
 
-1 skill, 21 commands, 24 anti-pattern rules, 1 CLI detector — for
+1 skill, 22 commands, 24 anti-pattern rules, 1 CLI detector — for
 Flutter mobile apps. Distributed to 10 AI harnesses.
 
 ## The problem
@@ -32,10 +32,11 @@ One skill with Flutter-first design guidance across:
 | [Responsive](src/skill/references/responsive.md) | LayoutBuilder, breakpoints, Flex children, overflow guards |
 | [UX Writing](src/skill/references/ux-writing.md) | Button labels, errors, empty states, i18n/ARB |
 
-### 21 slash commands
+### 22 slash commands
 
 | Category | Commands |
 |----------|----------|
+| **Setup** | `/teach` (run once per project — scans codebase, asks UX questions, writes `.klamben.md` design context) |
 | **Assessment** (read-only) | `/audit` `/critique` `/check-a11y` `/check-platform` |
 | **Refinement** (edits code) | `/normalize` `/polish` `/distill` `/harden` |
 | **Enhancement** | `/animate` `/colorize` `/typeset` `/arrange` `/delight` `/optimize` |
@@ -82,7 +83,24 @@ skills, commands, or settings. A `.klamben-manifest.json` tracks
 installed files for clean updates and uninstalls.
 
 Open your Flutter project in the harness. The skill auto-activates
-for `.dart` files. Invoke commands with `/audit`, `/polish`, etc.
+for `.dart` files.
+
+## Getting started
+
+After installing, run `/teach` once in your AI harness:
+
+```
+/teach
+```
+
+This scans your Flutter project (ThemeData, fonts, spacing tokens,
+platform patterns, l10n setup) and asks a few questions about your
+brand, audience, and accessibility goals. Results are saved to
+`.klamben.md` in your project root.
+
+All other commands (`/audit`, `/polish`, `/colorize`, etc.) read
+`.klamben.md` for project-specific guidance. Without it, commands
+still work but give generic Flutter advice.
 
 ## CLI detector
 

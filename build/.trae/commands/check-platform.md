@@ -19,6 +19,9 @@ and Android — this command finds the gaps.
 
 ## Checks
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. **Platform-specific code paths** — `Platform.isIOS` branches
    using Material widgets (and vice versa)
 2. **Missing .adaptive constructors** — `Switch` not `Switch.adaptive`,

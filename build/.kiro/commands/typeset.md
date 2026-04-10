@@ -18,6 +18,9 @@ Escape default Roboto. Wire a proper type system.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. **Add `google_fonts`** to `pubspec.yaml` if missing
 2. **Set `textTheme`** on `ThemeData` with `GoogleFonts.<font>TextTheme()`
 3. **Font choice** — if user doesn't specify, recommend one of:

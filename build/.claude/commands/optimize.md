@@ -19,6 +19,9 @@ Performance cleanup. Mechanical, safe changes only.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. **Add `const`** to every eligible constructor
 2. **`ListView.builder`** for lists > 10 items
 3. **`RepaintBoundary`** around animated or expensive subtrees

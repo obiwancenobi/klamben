@@ -18,6 +18,9 @@ Give a project a coherent color system from one seed.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. **Derive scheme:** `ColorScheme.fromSeed(seedColor: <user input>, brightness: light)`
 2. **Dark variant:** Same seed, `brightness: dark`
 3. **Wire both** into `MaterialApp.theme` / `darkTheme` / `themeMode: system`

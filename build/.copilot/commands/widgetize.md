@@ -18,6 +18,9 @@ Extract a subtree into a reusable widget class.
 
 ## Actions
 
+0. **Check design context:** If `.klamben.md` exists in the project root,
+   read it first. Apply the project's brand, platform targets,
+   accessibility tier, and existing patterns to your work below.
 1. Identify the target subtree
 2. Create a new private `StatelessWidget` (or `StatefulWidget` if
    it has state) in the same file, below the parent class
