@@ -1,7 +1,13 @@
-# klamben
+```
+  ╔═══════════════════════════════════════════╗
+  ║  ┌─┐   ┌─┐                               ║
+  ║ ┌┘ └───┘ └┐  klamben                     ║
+  ║ │         │  flutter design skill         ║
+  ║ └─────────┘  for AI code assistants       ║
+  ╚═══════════════════════════════════════════╝
+```
 
-Flutter mobile design skill for AI code assistants. A Flutter-flavored
-clone of [impeccable](https://github.com/pbakaus/impeccable).
+A Flutter-flavored clone of [impeccable](https://github.com/pbakaus/impeccable).
 
 1 skill, 28 commands, 24 anti-pattern rules, 1 CLI detector — for
 Flutter mobile apps. Distributed to 10 AI harnesses.
