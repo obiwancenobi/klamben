@@ -1,5 +1,6 @@
 // cli/lib/src/rules/rule_registry.dart
 
+import 'code_quality/swallowed_errors.dart';
 import 'layout/missing_safearea.dart';
 import 'platform/missing_adaptive.dart';
 import 'rule.dart';
@@ -17,6 +18,7 @@ class RuleRegistry {
       HardcodedColorRule(),
       MissingSafeAreaRule(),
       MissingAdaptiveRule(),
+      SwallowedErrorsRule(),
     ]);
   }
 
