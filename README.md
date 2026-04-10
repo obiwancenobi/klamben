@@ -31,6 +31,30 @@ missing `const`, missing semantic labels, and more.
 - **24 anti-pattern rules** in [`src/rules/rules.json`](src/rules/rules.json),
   covering visual, layout, platform, and code-quality categories.
 
+## CLI detector (`klamben`)
+
+Scan any Flutter project for anti-patterns without an AI harness:
+
+````bash
+# From the klamben repo
+cd cli && dart pub global activate --source path .
+
+# In your Flutter project
+klamben detect lib/
+klamben list-rules
+klamben explain visual/hardcoded-color
+klamben detect --format=json lib/ > findings.json
+````
+
+Exit codes:
+
+- `0` — no findings
+- `1` — one or more findings
+- `2` — tool error (bad path, invalid rule ID)
+
+**Note:** The CLI currently ships with 4 seed rules (one per category).
+The full 24-rule coverage will be added in a later sub-plan.
+
 ## Install (Claude Code)
 
 From the root of your Flutter project:
