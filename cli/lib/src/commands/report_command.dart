@@ -1,4 +1,4 @@
-// cli/lib/src/commands/detect_command.dart
+// cli/lib/src/commands/report_command.dart
 
 import 'dart:io';
 
@@ -7,36 +7,28 @@ import 'package:path/path.dart' as p;
 
 import '../engine.dart';
 import '../reporter/html_reporter.dart';
-import '../reporter/json_reporter.dart';
 import '../reporter/report_data.dart';
-import '../reporter/text_reporter.dart';
 import '../rules/rule.dart';
 import '../rules/rule_metadata.dart';
 import '../rules/rule_registry.dart';
 
-class DetectCommand extends Command<int> {
+class ReportCommand extends Command<int> {
   @override
-  String get name => 'detect';
+  String get name => 'report';
 
   @override
-  String get description => 'Scan .dart files for anti-patterns.';
+  String get description => 'Generate a rich HTML health dashboard.';
 
-  DetectCommand() {
+  ReportCommand() {
     argParser
       ..addOption('severity',
           abbr: 's',
           help: 'Minimum severity to report (error|warning|info)',
           defaultsTo: 'info')
-      ..addOption('format',
-          abbr: 'f',
-          allowed: ['text', 'json', 'html'],
-          help: 'Output format',
-          defaultsTo: 'text')
       ..addOption('output',
           abbr: 'o',
-          help: 'Output file path (used with --format=html)',
-          defaultsTo: 'klamben-report.html')
-      ..addFlag('no-color', help: 'Disable ANSI colors', negatable: false);
+          help: 'Output file path',
+          defaultsTo: 'klamben-report.html');
   }
 
   @override
@@ -51,41 +43,36 @@ class DetectCommand extends Command<int> {
 
     final severityStr = argResults!['severity'] as String;
     final minSeverity = RuleSeverity.fromJson(severityStr);
-    final noColor = argResults!['no-color'] as bool;
-    final format = argResults!['format'] as String;
 
-    final engine = Engine(registry: RuleRegistry.defaults());
+    final registry = RuleRegistry.defaults();
+    final engine = Engine(registry: registry);
     final findings = engine
         .detect(path)
         .where((f) => f.severity.index <= minSeverity.index)
         .toList();
 
-    if (format == 'html') {
-      final totalFiles = _countDartFiles(path);
-      final registry = RuleRegistry.defaults();
-      final catalog = RuleCatalog.fromBundled();
-      final data = ReportData.fromFindings(
-        findings,
-        scannedPath: path,
-        totalFiles: totalFiles,
-        totalRules: registry.rules.length,
-        catalog: catalog,
-      );
-      final html = const HtmlReporter().renderDetectReport(data);
-      final outputPath = argResults!['output'] as String;
-      HtmlReporter.writeToFile(html, outputPath);
-      stderr.writeln('Report written to $outputPath');
-      return findings.isEmpty ? 0 : 1;
-    }
+    final totalFiles = _countDartFiles(path);
+    final catalog = RuleCatalog.fromBundled();
+    final data = ReportData.fromFindings(
+      findings,
+      scannedPath: path,
+      totalFiles: totalFiles,
+      totalRules: registry.rules.length,
+      catalog: catalog,
+    );
 
-    final output = switch (format) {
-      'json' => const JsonReporter().render(findings),
-      _ => TextReporter(useColor: !noColor).render(findings),
-    };
-    stdout.write(output);
-    if (format == 'json' && !output.endsWith('\n')) stdout.writeln();
+    final html = const HtmlReporter().renderDashboard(data);
+    final outputPath = argResults!['output'] as String;
+    HtmlReporter.writeToFile(html, outputPath);
 
-    return findings.isEmpty ? 0 : 1;
+    stderr.writeln('Dashboard written to $outputPath');
+    stderr.writeln(
+      '  ${data.totalFiles} files scanned, '
+      '${data.totalFindings} findings, '
+      'health score: ${data.healthScore}/100',
+    );
+
+    return 0;
   }
 
   int _countDartFiles(String rootPath) {

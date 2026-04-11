@@ -6,6 +6,7 @@ import 'package:args/command_runner.dart';
 import 'package:klamben/src/commands/detect_command.dart';
 import 'package:klamben/src/commands/explain_command.dart';
 import 'package:klamben/src/commands/list_rules_command.dart';
+import 'package:klamben/src/commands/report_command.dart';
 
 class KlambenRunner extends CommandRunner<int> {
   KlambenRunner()
@@ -13,6 +14,7 @@ class KlambenRunner extends CommandRunner<int> {
     addCommand(DetectCommand());
     addCommand(ListRulesCommand());
     addCommand(ExplainCommand());
+    addCommand(ReportCommand());
   }
 
   @override
