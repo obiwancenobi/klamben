@@ -159,7 +159,10 @@ class ReportData {
       }
     }
 
-    final healthScore = max(0, 100 - (errors * 10 + warnings * 3 + infos * 1));
+    final penalty = totalFiles > 0
+        ? (errors * 10 + warnings * 3 + infos * 1) / totalFiles
+        : 0.0;
+    final healthScore = max(0, (100 - penalty).round());
 
     return ReportData(
       generatedAt: DateTime.now(),
