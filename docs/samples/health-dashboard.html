@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>klamben Health Dashboard</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card-bg: rgba(255,255,255,0.05);
+  --card-border: rgba(255,255,255,0.1);
+  --card-blur: blur(12px);
+  --gradient-accent: linear-gradient(135deg, #a78bfa, #38bdf8);
+  --color-error: #f87171;
+  --color-warning: #fbbf24;
+  --color-info: #38bdf8;
+  --color-visual: #a78bfa;
+  --color-layout: #38bdf8;
+  --color-platform: #34d399;
+  --color-code-quality: #fb923c;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --font-stack: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --max-width: 1200px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-stack);
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes progressFill {
+  from { width: 0; }
+}
+@keyframes donutFill {
+  from { background: conic-gradient(transparent 0deg, transparent 360deg); }
+}
+
+.fade-in {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.5s ease-out both;
+}
+.header .brand {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.25rem;
+}
+.header h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+.meta-pills {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.meta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  background: var(--card-bg);
+  backdrop-filter: var(--card-blur);
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.meta-pill svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0.7;
+}
+
+/* Cards (glass) */
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: var(--card-blur);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.glass-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.18);
+}
+
+/* Section titles */
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.section-title svg {
+  width: 20px;
+  height: 20px;
+  opacity: 0.8;
+}
+
+/* Health Score Donut */
+.health-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.5s ease-out 0.1s both;
+}
+.donut-wrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+.donut {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.donut-inner {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.donut-score {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.donut-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 0.25rem;
+}
+
+/* Summary Cards */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+.summary-card {
+  animation: fadeInUp 0.5s ease-out both;
+  text-align: center;
+}
+.summary-card .card-value {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.summary-card .card-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 0.25rem;
+}
+.summary-card .card-icon {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 0.5rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.summary-card .card-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Severity Bar */
+.severity-section {
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.5s ease-out 0.25s both;
+}
+.stacked-bar-container {
+  width: 100%;
+  height: 32px;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  background: rgba(255,255,255,0.03);
+}
+.stacked-segment {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #0f172a;
+  transition: width 0.8s ease-out;
+  min-width: 0;
+}
+.stacked-segment span {
+  white-space: nowrap;
+  overflow: hidden;
+}
+.severity-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Category Bars */
+.category-section {
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.5s ease-out 0.3s both;
+}
+.category-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+.category-bar-label {
+  width: 120px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+.category-bar-track {
+  flex: 1;
+  height: 22px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 11px;
+  overflow: hidden;
+}
+.category-bar-fill {
+  height: 100%;
+  border-radius: 11px;
+  transition: width 0.8s ease-out;
+  animation: progressFill 0.8s ease-out;
+}
+.category-bar-count {
+  width: 36px;
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+/* Rule Coverage */
+.coverage-section {
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.5s ease-out 0.35s both;
+}
+.coverage-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+.coverage-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+.coverage-pct {
+  font-size: 1rem;
+  font-weight: 700;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.coverage-track {
+  width: 100%;
+  height: 18px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 9px;
+  overflow: hidden;
+}
+.coverage-fill {
+  height: 100%;
+  border-radius: 9px;
+  background: var(--gradient-accent);
+  transition: width 0.8s ease-out;
+  animation: progressFill 0.8s ease-out;
+}
+
+/* Category Health */
+.cat-health-section {
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.5s ease-out 0.38s both;
+}
+.cat-health-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+.cat-health-label {
+  width: 140px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+.cat-health-track {
+  flex: 1;
+  height: 22px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 11px;
+  overflow: hidden;
+}
+.cat-health-fill {
+  height: 100%;
+  border-radius: 11px;
+  transition: width 0.8s ease-out;
+  animation: progressFill 0.8s ease-out;
+}
+.cat-health-score {
+  width: 50px;
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+/* Recommendations */
+.recs-section {
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.5s ease-out 0.4s both;
+}
+.rec-card {
+  background: var(--card-bg);
+  backdrop-filter: var(--card-blur);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  border-left: 3px solid transparent;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.rec-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 24px rgba(167, 139, 250, 0.08);
+}
+.rec-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+.rec-card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.rec-card-hint {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.rec-card-count {
+  margin-left: auto;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  color: var(--text-secondary);
+}
+.rec-empty {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+.rec-empty svg {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 0.75rem;
+  opacity: 0.5;
+}
+
+/* Badges */
+.severity-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.severity-badge.error {
+  background: rgba(248,113,113,0.15);
+  color: var(--color-error);
+}
+.severity-badge.warning {
+  background: rgba(251,191,36,0.15);
+  color: var(--color-warning);
+}
+.severity-badge.info {
+  background: rgba(56,189,248,0.15);
+  color: var(--color-info);
+}
+
+/* Top Rules */
+.top-rules-section {
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.5s ease-out 0.45s both;
+}
+.rule-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.rule-row:last-child {
+  border-bottom: none;
+}
+.rule-rank {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.rule-info {
+  flex: 1;
+  min-width: 0;
+}
+.rule-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rule-id {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+.rule-count {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+/* Findings */
+.findings-section {
+  margin-bottom: 2.5rem;
+  animation: fadeInUp 0.5s ease-out 0.5s both;
+}
+.findings-controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.findings-controls button {
+  padding: 0.4rem 0.85rem;
+  background: var(--card-bg);
+  backdrop-filter: var(--card-blur);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-family: var(--font-stack);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.findings-controls button:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary);
+}
+.file-group {
+  margin-bottom: 0.5rem;
+}
+.file-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  user-select: none;
+}
+.file-header:hover {
+  background: rgba(255,255,255,0.07);
+}
+.file-header .chevron {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+.file-header.open .chevron {
+  transform: rotate(90deg);
+}
+.file-name {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.file-count {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.05);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+}
+.file-findings {
+  display: none;
+  padding: 0.25rem 0 0.25rem 1.5rem;
+}
+.file-findings.open {
+  display: block;
+}
+.finding-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  margin-top: 0.35rem;
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  border-left: 2px solid transparent;
+}
+.finding-item.error { border-left-color: var(--color-error); }
+.finding-item.warning { border-left-color: var(--color-warning); }
+.finding-item.info { border-left-color: var(--color-info); }
+.finding-message {
+  flex: 1;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.finding-loc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem 0 1rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  margin-top: 1rem;
+}
+.footer-brand {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.footer-sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+/* Celebration */
+.celebration {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+.celebration .big-emoji {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .container { padding: 1rem; }
+  .header h1 { font-size: 1.5rem; }
+  .donut-wrapper, .donut { width: 160px; height: 160px; }
+  .donut-inner { width: 112px; height: 112px; }
+  .donut-score { font-size: 2.25rem; }
+  .summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .category-bar-label, .cat-health-label { width: 90px; font-size: 0.78rem; }
+  .rec-card-count { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <header class="header" id="header"></header>
+
+  <!-- Health Score -->
+  <section class="health-section" id="healthScore"></section>
+
+  <!-- Summary Cards -->
+  <section class="summary-grid" id="summaryCards"></section>
+
+  <!-- Severity Distribution -->
+  <section class="severity-section" id="severityDist"></section>
+
+  <!-- Category Breakdown -->
+  <section class="category-section" id="categoryBreakdown"></section>
+
+  <!-- Rule Coverage Gauge -->
+  <section class="coverage-section" id="ruleCoverage"></section>
+
+  <!-- Category Health -->
+  <section class="cat-health-section" id="catHealth"></section>
+
+  <!-- Recommendations -->
+  <section class="recs-section" id="recommendations"></section>
+
+  <!-- Top Triggered Rules -->
+  <section class="top-rules-section" id="topRules"></section>
+
+  <!-- Findings Detail -->
+  <section class="findings-section" id="findings"></section>
+
+  <!-- Footer -->
+  <footer class="footer" id="footer"></footer>
+
+</div>
+
+<script>
+const KLAMBEN_DATA = {
+  "generatedAt": "2026-04-11T15:37:40.289327",
+  "scannedPath": "test/fixtures/bad/",
+  "totalFiles": 11,
+  "totalFindings": 28,
+  "bySeverity": {
+    "error": 2,
+    "warning": 14,
+    "info": 12
+  },
+  "byCategory": {
+    "layout": 5,
+    "visual": 14,
+    "platform": 2,
+    "code-quality": 7
+  },
+  "byFile": {
+    "test/fixtures/bad/all_violations.dart": [
+      {
+        "ruleId": "layout/missing-safearea",
+        "severity": "error",
+        "message": "Scaffold body without SafeArea or AppBar — content will collide with status bar / notch.",
+        "line": 10,
+        "column": 12
+      },
+      {
+        "ruleId": "visual/hardcoded-color",
+        "severity": "warning",
+        "message": "Use ColorScheme semantic token instead of Colors.purple",
+        "line": 13,
+        "column": 28
+      },
+      {
+        "ruleId": "platform/missing-adaptive",
+        "severity": "info",
+        "message": "Use Switch.adaptive for platform-correct rendering on iOS.",
+        "line": 14,
+        "column": 11
+      },
+      {
+        "ruleId": "code-quality/swallowed-errors",
+        "severity": "warning",
+        "message": "Empty catch block swallows the error. At least log it with debugPrint().",
+        "line": 24,
+        "column": 5
+      }
+    ],
+    "test/fixtures/bad/gradient_abuse.dart": [
+      {
+        "ruleId": "visual/gradient-abuse",
+        "severity": "info",
+        "message": "Purple-to-pink gradient detected. Consider a more distinctive palette.",
+        "line": 2,
+        "column": 11
+      },
+      {
+        "ruleId": "visual/hardcoded-color",
+        "severity": "warning",
+        "message": "Use ColorScheme semantic token instead of Colors.purple",
+        "line": 2,
+        "column": 35
+      },
+      {
+        "ruleId": "visual/hardcoded-color",
+        "severity": "warning",
+        "message": "Use ColorScheme semantic token instead of Colors.pink",
+        "line": 2,
+        "column": 50
+      }
+    ],
+    "test/fixtures/bad/hardcoded_color.dart": [
+      {
+        "ruleId": "visual/hardcoded-color",
+        "severity": "warning",
+        "message": "Use ColorScheme semantic token instead of Colors.purple",
+        "line": 7,
+        "column": 27
+      },
+      {
+        "ruleId": "visual/hardcoded-color",
+        "severity": "warning",
+        "message": "Use ColorScheme semantic token instead of Color(0x...)",
+        "line": 11,
+        "column": 27
+      }
+    ],
+    "test/fixtures/bad/inline_textstyle.dart": [
+      {
+        "ruleId": "visual/inline-textstyle",
+        "severity": "warning",
+        "message": "Inline TextStyle with literal fontSize. Use Theme.of(context).textTheme instead.",
+        "line": 2,
+        "column": 11
+      }
+    ],
+    "test/fixtures/bad/missing_adaptive.dart": [
+      {
+        "ruleId": "platform/missing-adaptive",
+        "severity": "info",
+        "message": "Use Switch.adaptive for platform-correct rendering on iOS.",
+        "line": 7,
+        "column": 10
+      }
+    ],
+    "test/fixtures/bad/missing_safearea.dart": [
+      {
+        "ruleId": "layout/missing-safearea",
+        "severity": "error",
+        "message": "Scaffold body without SafeArea or AppBar — content will collide with status bar / notch.",
+        "line": 10,
+        "column": 12
+      },
+      {
+        "ruleId": "layout/no-flexible",
+        "severity": "warning",
+        "message": "Text widget in Column without Flexible/Expanded — may overflow on narrow screens.",
+        "line": 11,
+        "column": 13
+      },
+      {
+        "ruleId": "code-quality/hardcoded-strings",
+        "severity": "info",
+        "message": "Text widget has a hardcoded string 'hello'. Consider extracting for i18n.",
+        "line": 11,
+        "column": 37
+      },
+      {
+        "ruleId": "layout/no-flexible",
+        "severity": "warning",
+        "message": "Text widget in Column without Flexible/Expanded — may overflow on narrow screens.",
+        "line": 22,
+        "column": 13
+      },
+      {
+        "ruleId": "code-quality/hardcoded-strings",
+        "severity": "info",
+        "message": "Text widget has a hardcoded string 'hello'. Consider extracting for i18n.",
+        "line": 22,
+        "column": 37
+      },
+      {
+        "ruleId": "layout/no-flexible",
+        "severity": "warning",
+        "message": "Text widget in Column without Flexible/Expanded — may overflow on narrow screens.",
+        "line": 33,
+        "column": 16
+      },
+      {
+        "ruleId": "code-quality/hardcoded-strings",
+        "severity": "info",
+        "message": "Text widget has a hardcoded string 'hello'. Consider extracting for i18n.",
+        "line": 33,
+        "column": 40
+      }
+    ],
+    "test/fixtures/bad/nested_cards.dart": [
+      {
+        "ruleId": "visual/nested-cards",
+        "severity": "warning",
+        "message": "Card nested inside Card creates confusing visual hierarchy.",
+        "line": 2,
+        "column": 11
+      },
+      {
+        "ruleId": "code-quality/hardcoded-strings",
+        "severity": "info",
+        "message": "Text widget has a hardcoded string 'nested'. Consider extracting for i18n.",
+        "line": 2,
+        "column": 35
+      },
+      {
+        "ruleId": "code-quality/missing-const",
+        "severity": "info",
+        "message": "Text with all-literal args could be const.",
+        "line": 2,
+        "column": 35
+      }
+    ],
+    "test/fixtures/bad/pure_black_text.dart": [
+      {
+        "ruleId": "visual/pure-black-text",
+        "severity": "warning",
+        "message": "Avoid pure black text (Colors.black). Use a dark grey or theme color for better readability.",
+        "line": 2,
+        "column": 11
+      },
+      {
+        "ruleId": "visual/hardcoded-color",
+        "severity": "warning",
+        "message": "Use ColorScheme semantic token instead of Colors.black",
+        "line": 2,
+        "column": 28
+      }
+    ],
+    "test/fixtures/bad/roboto_default.dart": [
+      {
+        "ruleId": "visual/roboto-default",
+        "severity": "info",
+        "message": "ThemeData without textTheme uses default Roboto. Consider setting a custom textTheme.",
+        "line": 2,
+        "column": 12
+      },
+      {
+        "ruleId": "visual/roboto-default",
+        "severity": "info",
+        "message": "ThemeData without textTheme uses default Roboto. Consider setting a custom textTheme.",
+        "line": 3,
+        "column": 12
+      }
+    ],
+    "test/fixtures/bad/shadow_overuse.dart": [
+      {
+        "ruleId": "visual/shadow-overuse",
+        "severity": "info",
+        "message": "Elevation 16.0 is excessive (> 8). High elevation creates unrealistic shadows.",
+        "line": 2,
+        "column": 11
+      },
+      {
+        "ruleId": "visual/shadow-overuse",
+        "severity": "info",
+        "message": "Elevation 24.0 is excessive (> 8). High elevation creates unrealistic shadows.",
+        "line": 3,
+        "column": 11
+      }
+    ],
+    "test/fixtures/bad/swallowed_errors.dart": [
+      {
+        "ruleId": "code-quality/swallowed-errors",
+        "severity": "warning",
+        "message": "Empty catch block swallows the error. At least log it with debugPrint().",
+        "line": 7,
+        "column": 5
+      }
+    ]
+  },
+  "topRules": [
+    {
+      "ruleId": "visual/hardcoded-color",
+      "title": "Hardcoded Color constant",
+      "severity": "warning",
+      "category": "visual",
+      "count": 6
+    },
+    {
+      "ruleId": "code-quality/hardcoded-strings",
+      "title": "Hardcoded user-facing string",
+      "severity": "info",
+      "category": "code-quality",
+      "count": 4
+    },
+    {
+      "ruleId": "layout/no-flexible",
+      "title": "Row/Column children with implicit sizing",
+      "severity": "warning",
+      "category": "layout",
+      "count": 3
+    },
+    {
+      "ruleId": "layout/missing-safearea",
+      "title": "Scaffold body without SafeArea",
+      "severity": "error",
+      "category": "layout",
+      "count": 2
+    },
+    {
+      "ruleId": "platform/missing-adaptive",
+      "title": "Switch without Switch.adaptive",
+      "severity": "info",
+      "category": "platform",
+      "count": 2
+    },
+    {
+      "ruleId": "code-quality/swallowed-errors",
+      "title": "Empty catch block",
+      "severity": "warning",
+      "category": "code-quality",
+      "count": 2
+    },
+    {
+      "ruleId": "visual/roboto-default",
+      "title": "Roboto default font",
+      "severity": "info",
+      "category": "visual",
+      "count": 2
+    },
+    {
+      "ruleId": "visual/shadow-overuse",
+      "title": "Excessive elevation",
+      "severity": "info",
+      "category": "visual",
+      "count": 2
+    },
+    {
+      "ruleId": "visual/gradient-abuse",
+      "title": "Purple gradient background",
+      "severity": "info",
+      "category": "visual",
+      "count": 1
+    },
+    {
+      "ruleId": "visual/inline-textstyle",
+      "title": "Inline TextStyle instead of theme",
+      "severity": "warning",
+      "category": "visual",
+      "count": 1
+    },
+    {
+      "ruleId": "visual/nested-cards",
+      "title": "Card nested inside Card",
+      "severity": "warning",
+      "category": "visual",
+      "count": 1
+    },
+    {
+      "ruleId": "code-quality/missing-const",
+      "title": "Missing const constructor",
+      "severity": "info",
+      "category": "code-quality",
+      "count": 1
+    },
+    {
+      "ruleId": "visual/pure-black-text",
+      "title": "Pure black text color",
+      "severity": "warning",
+      "category": "visual",
+      "count": 1
+    }
+  ],
+  "healthScore": 26,
+  "totalRules": 24,
+  "triggeredRules": 13,
+  "recommendations": [
+    {
+      "ruleId": "visual/hardcoded-color",
+      "title": "Hardcoded Color constant",
+      "fixHint": "Replace with Theme.of(context).colorScheme.primary (or appropriate semantic token).",
+      "count": 6,
+      "severity": "warning"
+    },
+    {
+      "ruleId": "code-quality/hardcoded-strings",
+      "title": "Hardcoded user-facing string",
+      "fixHint": "Extract to ARB file and use AppLocalizations.of(context).<key>.",
+      "count": 4,
+      "severity": "info"
+    },
+    {
+      "ruleId": "layout/no-flexible",
+      "title": "Row/Column children with implicit sizing",
+      "fixHint": "Wrap variable-length children in Flexible or Expanded.",
+      "count": 3,
+      "severity": "warning"
+    },
+    {
+      "ruleId": "layout/missing-safearea",
+      "title": "Scaffold body without SafeArea",
+      "fixHint": "Wrap body in SafeArea(child: ...), or use Scaffold(appBar: ...) which handles the top inset.",
+      "count": 2,
+      "severity": "error"
+    },
+    {
+      "ruleId": "platform/missing-adaptive",
+      "title": "Switch without Switch.adaptive",
+      "fixHint": "Use Switch.adaptive(value: ..., onChanged: ...).",
+      "count": 2,
+      "severity": "info"
+    }
+  ]
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  var D = KLAMBEN_DATA;
+
+  var sevColors = { error: '#f87171', warning: '#fbbf24', info: '#38bdf8' };
+  var catColors = { visual: '#a78bfa', layout: '#38bdf8', platform: '#34d399', 'code-quality': '#fb923c' };
+  var catIcons = {
+    visual: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>',
+    layout: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>',
+    platform: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>',
+    'code-quality': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>'
+  };
+
+  // Escape HTML to prevent XSS when rendering data values
+  function esc(s) {
+    if (s == null) return '';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // Safe DOM element creation helpers
+  function el(tag, attrs, children) {
+    var node = document.createElement(tag);
+    if (attrs) {
+      Object.keys(attrs).forEach(function(k) {
+        if (k === 'className') node.className = attrs[k];
+        else if (k === 'textContent') node.textContent = attrs[k];
+        else node.setAttribute(k, attrs[k]);
+      });
+    }
+    if (typeof children === 'string') node.textContent = children;
+    else if (Array.isArray(children)) children.forEach(function(c) { if (c) node.appendChild(c); });
+    return node;
+  }
+
+  function svgMarkup(svg) {
+    var span = document.createElement('span');
+    span.innerHTML = svg;
+    return span;
+  }
+
+  // Header
+  var genDate = D.generatedAt ? new Date(D.generatedAt) : new Date();
+  var dateStr = genDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+  (function renderHeader() {
+    var header = document.getElementById('header');
+    var brandDiv = el('div', { className: 'brand' }, 'klamben');
+    var h1 = el('h1', {}, 'Health Dashboard');
+    var pills = el('div', { className: 'meta-pills' });
+
+    var pill1 = el('span', { className: 'meta-pill' });
+    pill1.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>';
+    pill1.appendChild(document.createTextNode(D.scannedPath || ''));
+
+    var pill2 = el('span', { className: 'meta-pill' });
+    pill2.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+    pill2.appendChild(document.createTextNode(dateStr));
+
+    var pill3 = el('span', { className: 'meta-pill' });
+    pill3.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>';
+    pill3.appendChild(document.createTextNode((D.totalFindings || 0) + ' findings'));
+
+    pills.appendChild(pill1);
+    pills.appendChild(pill2);
+    pills.appendChild(pill3);
+    header.appendChild(brandDiv);
+    header.appendChild(h1);
+    header.appendChild(pills);
+  })();
+
+  // Health Score Donut
+  var score = typeof D.healthScore === 'number' ? D.healthScore : 100;
+  var sev = D.bySeverity || {};
+  var total = (sev.error || 0) + (sev.warning || 0) + (sev.info || 0);
+
+  (function renderDonut() {
+    var s = total === 0 ? 100 : score;
+    var deg = Math.round((s / 100) * 360);
+    var scoreColor = s >= 80 ? '#34d399' : s >= 50 ? '#fbbf24' : '#f87171';
+    var section = document.getElementById('healthScore');
+    var wrapper = el('div', { className: 'donut-wrapper' });
+    var donut = el('div', { className: 'donut' });
+    donut.style.background = 'conic-gradient(' + scoreColor + ' 0deg, ' + scoreColor + ' ' + deg + 'deg, rgba(255,255,255,0.06) ' + deg + 'deg, rgba(255,255,255,0.06) 360deg)';
+    var inner = el('div', { className: 'donut-inner' });
+    var scoreDiv = el('div', { className: 'donut-score' }, String(s));
+    var labelDiv = el('div', { className: 'donut-label' }, 'Health Score');
+    inner.appendChild(scoreDiv);
+    inner.appendChild(labelDiv);
+    donut.appendChild(inner);
+    wrapper.appendChild(donut);
+    section.appendChild(wrapper);
+  })();
+
+  // Summary Cards
+  (function renderSummaryCards() {
+    var cards = [
+      { label: 'Errors', value: sev.error || 0, color: '#f87171', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>' },
+      { label: 'Warnings', value: sev.warning || 0, color: '#fbbf24', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' },
+      { label: 'Info', value: sev.info || 0, color: '#38bdf8', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' },
+      { label: 'Files Scanned', value: D.totalFiles || 0, color: '#a78bfa', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' }
+    ];
+    var grid = document.getElementById('summaryCards');
+    cards.forEach(function(c, i) {
+      var card = el('div', { className: 'glass-card summary-card' });
+      card.style.animationDelay = (0.15 + i * 0.05) + 's';
+      var iconDiv = el('div', { className: 'card-icon' });
+      iconDiv.style.background = c.color + '22';
+      iconDiv.style.color = c.color;
+      iconDiv.innerHTML = c.icon;
+      var valDiv = el('div', { className: 'card-value' }, String(c.value));
+      valDiv.style.color = c.color;
+      var lblDiv = el('div', { className: 'card-label' }, c.label);
+      card.appendChild(iconDiv);
+      card.appendChild(valDiv);
+      card.appendChild(lblDiv);
+      grid.appendChild(card);
+    });
+  })();
+
+  // Severity Distribution
+  (function renderSeverity() {
+    var section = document.getElementById('severityDist');
+    var card = el('div', { className: 'glass-card' });
+    var title = el('div', { className: 'section-title' });
+    title.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12h-4l-3 9L9 3l-3 9H3"/></svg>';
+    title.appendChild(document.createTextNode('Severity Distribution'));
+    card.appendChild(title);
+
+    if (total > 0) {
+      var bar = el('div', { className: 'stacked-bar-container' });
+      ['error', 'warning', 'info'].forEach(function(s) {
+        var count = sev[s] || 0;
+        if (count > 0) {
+          var pct = (count / total * 100).toFixed(1);
+          var seg = el('div', { className: 'stacked-segment' });
+          seg.style.width = pct + '%';
+          seg.style.background = sevColors[s];
+          seg.appendChild(el('span', {}, String(count)));
+          bar.appendChild(seg);
+        }
+      });
+      card.appendChild(bar);
+
+      var legend = el('div', { className: 'severity-legend' });
+      ['error', 'warning', 'info'].forEach(function(s) {
+        var item = el('div', { className: 'legend-item' });
+        var dot = el('span', { className: 'legend-dot' });
+        dot.style.background = sevColors[s];
+        item.appendChild(dot);
+        item.appendChild(document.createTextNode(s.charAt(0).toUpperCase() + s.slice(1) + ': ' + (sev[s] || 0)));
+        legend.appendChild(item);
+      });
+      card.appendChild(legend);
+    } else {
+      var cele = el('div', { className: 'celebration' });
+      cele.innerHTML = '<span class="big-emoji">&#127881;</span>';
+      cele.appendChild(document.createTextNode('No findings detected. Your code is clean!'));
+      card.appendChild(cele);
+    }
+
+    section.appendChild(card);
+  })();
+
+  // Category Breakdown
+  (function renderCategory() {
+    var cats = D.byCategory || {};
+    var catKeys = Object.keys(cats).sort(function(a, b) { return (cats[b] || 0) - (cats[a] || 0); });
+    var maxCat = catKeys.length > 0 ? cats[catKeys[0]] : 1;
+    var section = document.getElementById('categoryBreakdown');
+    var card = el('div', { className: 'glass-card' });
+    var title = el('div', { className: 'section-title' });
+    title.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>';
+    title.appendChild(document.createTextNode('Category Breakdown'));
+    card.appendChild(title);
+
+    catKeys.forEach(function(cat) {
+      var pct = maxCat > 0 ? (cats[cat] / maxCat * 100) : 0;
+      var color = catColors[cat] || '#94a3b8';
+      var row = el('div', { className: 'category-bar-row' });
+      var lbl = el('div', { className: 'category-bar-label' });
+      lbl.style.color = color;
+      if (catIcons[cat]) { var ic = document.createElement('span'); ic.style.cssText = 'width:16px;height:16px;display:inline-flex'; ic.innerHTML = catIcons[cat]; lbl.appendChild(ic); }
+      lbl.appendChild(document.createTextNode(cat));
+      var track = el('div', { className: 'category-bar-track' });
+      var fill = el('div', { className: 'category-bar-fill' });
+      fill.style.width = pct + '%';
+      fill.style.background = color;
+      track.appendChild(fill);
+      var cnt = el('div', { className: 'category-bar-count' }, String(cats[cat]));
+      row.appendChild(lbl);
+      row.appendChild(track);
+      row.appendChild(cnt);
+      card.appendChild(row);
+    });
+
+    section.appendChild(card);
+  })();
+
+  // Rule Coverage Gauge
+  (function renderCoverage() {
+    var triggered = D.triggeredRules || 0;
+    var totalR = D.totalRules || 1;
+    var covPct = Math.round((triggered / totalR) * 100);
+    var section = document.getElementById('ruleCoverage');
+    var card = el('div', { className: 'glass-card' });
+    var title = el('div', { className: 'section-title' });
+    title.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+    title.appendChild(document.createTextNode('Rule Coverage'));
+    card.appendChild(title);
+
+    var info = el('div', { className: 'coverage-info' });
+    info.appendChild(el('span', { className: 'coverage-label' }, triggered + ' / ' + totalR + ' rules triggered'));
+    info.appendChild(el('span', { className: 'coverage-pct' }, covPct + '%'));
+    card.appendChild(info);
+
+    var track = el('div', { className: 'coverage-track' });
+    var fill = el('div', { className: 'coverage-fill' });
+    fill.style.width = covPct + '%';
+    track.appendChild(fill);
+    card.appendChild(track);
+
+    section.appendChild(card);
+  })();
+
+  // Category Health
+  (function renderCatHealth() {
+    var byFile = D.byFile || {};
+    var catFindings = {};
+    Object.keys(byFile).forEach(function(file) {
+      byFile[file].forEach(function(f) {
+        var cat = f.ruleId ? f.ruleId.split('/')[0] : 'unknown';
+        if (!catFindings[cat]) catFindings[cat] = { error: 0, warning: 0, info: 0 };
+        if (f.severity === 'error') catFindings[cat].error++;
+        else if (f.severity === 'warning') catFindings[cat].warning++;
+        else catFindings[cat].info++;
+      });
+    });
+
+    var allCats = Object.keys(catColors);
+    var section = document.getElementById('catHealth');
+    var card = el('div', { className: 'glass-card' });
+    var title = el('div', { className: 'section-title' });
+    title.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H3"/></svg>';
+    title.appendChild(document.createTextNode('Category Health'));
+    card.appendChild(title);
+
+    allCats.forEach(function(cat) {
+      var cf = catFindings[cat] || { error: 0, warning: 0, info: 0 };
+      var penalty = cf.error * 10 + cf.warning * 3 + cf.info * 1;
+      var health = Math.max(0, 100 - penalty);
+      var color = catColors[cat] || '#94a3b8';
+      var row = el('div', { className: 'cat-health-row' });
+      var lbl = el('div', { className: 'cat-health-label' });
+      lbl.style.color = color;
+      if (catIcons[cat]) { var ic = document.createElement('span'); ic.style.cssText = 'width:16px;height:16px;display:inline-flex'; ic.innerHTML = catIcons[cat]; lbl.appendChild(ic); }
+      lbl.appendChild(document.createTextNode(cat));
+      var track = el('div', { className: 'cat-health-track' });
+      var fill = el('div', { className: 'cat-health-fill' });
+      fill.style.width = health + '%';
+      fill.style.background = color;
+      track.appendChild(fill);
+      var scoreEl = el('div', { className: 'cat-health-score' }, health + '%');
+      row.appendChild(lbl);
+      row.appendChild(track);
+      row.appendChild(scoreEl);
+      card.appendChild(row);
+    });
+
+    section.appendChild(card);
+  })();
+
+  // Recommendations
+  (function renderRecs() {
+    var recs = D.recommendations || [];
+    var section = document.getElementById('recommendations');
+    var card = el('div', { className: 'glass-card' });
+    var title = el('div', { className: 'section-title' });
+    title.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+    title.appendChild(document.createTextNode('Recommendations'));
+    card.appendChild(title);
+
+    if (recs.length === 0) {
+      var empty = el('div', { className: 'rec-empty' });
+      empty.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+      empty.appendChild(el('div', {}, 'No recommendations \u2014 great job!'));
+      card.appendChild(empty);
+    } else {
+      recs.slice(0, 5).forEach(function(r) {
+        var bColor = sevColors[r.severity] || '#94a3b8';
+        var rc = el('div', { className: 'rec-card' });
+        rc.style.borderLeftColor = bColor;
+        var hdr = el('div', { className: 'rec-card-header' });
+        hdr.appendChild(el('span', { className: 'severity-badge ' + esc(r.severity) }, r.severity));
+        hdr.appendChild(el('span', { className: 'rec-card-title' }, r.title));
+        hdr.appendChild(el('span', { className: 'rec-card-count' }, r.count + ' occurrence' + (r.count !== 1 ? 's' : '')));
+        rc.appendChild(hdr);
+        rc.appendChild(el('div', { className: 'rec-card-hint' }, r.fixHint));
+        card.appendChild(rc);
+      });
+    }
+
+    section.appendChild(card);
+  })();
+
+  // Top Triggered Rules
+  (function renderTopRules() {
+    var topR = D.topRules || [];
+    var section = document.getElementById('topRules');
+    var card = el('div', { className: 'glass-card' });
+    var title = el('div', { className: 'section-title' });
+    title.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+    title.appendChild(document.createTextNode('Top Triggered Rules'));
+    card.appendChild(title);
+
+    if (topR.length === 0) {
+      card.appendChild(el('div', { className: 'celebration' }, 'No rules triggered.'));
+    } else {
+      topR.forEach(function(r, i) {
+        var row = el('div', { className: 'rule-row' });
+        row.appendChild(el('div', { className: 'rule-rank' }, String(i + 1)));
+        row.appendChild(el('span', { className: 'severity-badge ' + esc(r.severity) }, r.severity));
+        var info = el('div', { className: 'rule-info' });
+        info.appendChild(el('div', { className: 'rule-title' }, r.title));
+        info.appendChild(el('div', { className: 'rule-id' }, r.ruleId));
+        row.appendChild(info);
+        row.appendChild(el('div', { className: 'rule-count' }, String(r.count)));
+        card.appendChild(row);
+      });
+    }
+
+    section.appendChild(card);
+  })();
+
+  // Findings Detail
+  (function renderFindings() {
+    var byFile = D.byFile || {};
+    var files = Object.keys(byFile).sort();
+    var section = document.getElementById('findings');
+    var card = el('div', { className: 'glass-card' });
+    var title = el('div', { className: 'section-title' });
+    title.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
+    title.appendChild(document.createTextNode('Findings Detail'));
+    card.appendChild(title);
+
+    if (files.length > 0) {
+      var controls = el('div', { className: 'findings-controls' });
+      var expandBtn = el('button', { id: 'expandAll' }, 'Expand All');
+      var collapseBtn = el('button', { id: 'collapseAll' }, 'Collapse All');
+      controls.appendChild(expandBtn);
+      controls.appendChild(collapseBtn);
+      card.appendChild(controls);
+
+      files.forEach(function(file, fi) {
+        var items = byFile[file];
+        var group = el('div', { className: 'file-group' });
+        var hdr = el('div', { className: 'file-header' });
+        hdr.setAttribute('data-idx', fi);
+        hdr.innerHTML = '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>';
+        hdr.appendChild(el('span', { className: 'file-name' }, file));
+        hdr.appendChild(el('span', { className: 'file-count' }, String(items.length)));
+        group.appendChild(hdr);
+
+        var panel = el('div', { className: 'file-findings' });
+        panel.setAttribute('data-idx', fi);
+        items.forEach(function(item) {
+          var fi = el('div', { className: 'finding-item ' + esc(item.severity) });
+          fi.appendChild(el('span', { className: 'severity-badge ' + esc(item.severity) }, item.severity));
+          fi.appendChild(el('span', { className: 'finding-message' }, item.message));
+          fi.appendChild(el('span', { className: 'finding-loc' }, 'L' + item.line + ':' + item.column));
+          panel.appendChild(fi);
+        });
+        group.appendChild(panel);
+        card.appendChild(group);
+      });
+
+      // Wire up expand/collapse after elements are in the DOM
+      setTimeout(function() {
+        document.querySelectorAll('.file-header').forEach(function(hdr) {
+          hdr.addEventListener('click', function() {
+            var idx = this.getAttribute('data-idx');
+            var panel = document.querySelector('.file-findings[data-idx="' + idx + '"]');
+            var isOpen = this.classList.toggle('open');
+            if (isOpen) panel.classList.add('open');
+            else panel.classList.remove('open');
+          });
+        });
+        var eb = document.getElementById('expandAll');
+        var cb = document.getElementById('collapseAll');
+        if (eb) {
+          eb.addEventListener('click', function() {
+            document.querySelectorAll('.file-header').forEach(function(h) { h.classList.add('open'); });
+            document.querySelectorAll('.file-findings').forEach(function(p) { p.classList.add('open'); });
+          });
+        }
+        if (cb) {
+          cb.addEventListener('click', function() {
+            document.querySelectorAll('.file-header').forEach(function(h) { h.classList.remove('open'); });
+            document.querySelectorAll('.file-findings').forEach(function(p) { p.classList.remove('open'); });
+          });
+        }
+      }, 0);
+    } else {
+      var cele = el('div', { className: 'celebration' });
+      cele.innerHTML = '<span class="big-emoji">&#10024;</span>';
+      cele.appendChild(document.createTextNode('No findings to display.'));
+      card.appendChild(cele);
+    }
+
+    section.appendChild(card);
+  })();
+
+  // Footer
+  (function renderFooter() {
+    var footer = document.getElementById('footer');
+    footer.appendChild(el('div', { className: 'footer-brand' }, 'klamben'));
+    footer.appendChild(el('div', { className: 'footer-sub' }, 'Flutter Design Anti-Pattern Detector \u00b7 Generated ' + dateStr));
+  })();
+});
+</script>
+</body>
+</html>

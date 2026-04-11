@@ -125,7 +125,7 @@ touching your custom files.
 ## CLI detector
 
 Standalone Dart CLI that scans Flutter projects for anti-patterns
-without an AI harness. All 24 rules, text or JSON output.
+without an AI harness. All 24 rules, text, JSON, or HTML output.
 
 ```bash
 # Install from source
@@ -135,6 +135,14 @@ cd ~/klamben/cli && dart pub global activate --source path .
 klamben detect lib/
 klamben detect --format=json lib/ > findings.json
 klamben detect --severity=error lib/
+
+# HTML report (self-contained, no external deps)
+klamben detect --format=html lib/
+klamben detect --format=html --output=report.html lib/
+
+# Health dashboard (extended report with score, coverage, recommendations)
+klamben report lib/
+klamben report --output=dashboard.html lib/
 
 # Explore rules
 klamben list-rules
@@ -154,6 +162,25 @@ lib/screens/home.dart
 3 issues (1 error, 1 warning, 1 info) in 1 file.
 ```
 
+### HTML reports
+
+`--format=html` generates a self-contained single-file HTML report with:
+
+- Health score (0–100) with conic-gradient donut chart
+- Severity and category breakdown with CSS-only charts
+- Top triggered rules ranked by frequency
+- Collapsible per-file findings detail
+- Gradient Premium dark theme — no external dependencies, works offline
+
+The `report` command generates an extended health dashboard that adds
+rule coverage gauge, per-category health scores, and actionable
+recommendations with fix hints from the rule catalog.
+
+**Try it yourself** — download and open in your browser:
+
+- [Detect Report](docs/samples/detect-report.html) — `klamben detect --format=html`
+- [Health Dashboard](docs/samples/health-dashboard.html) — `klamben report`
+
 ## Architecture
 
 ```
@@ -171,7 +198,7 @@ klamben/
 │   ├── .trae/ .rovo/ .copilot/ .pi/
 ├── cli/                     # Dart CLI detector package
 │   ├── lib/src/rules/       # 24 rule implementations
-│   ├── lib/src/reporter/    # text + JSON output
+│   ├── lib/src/reporter/    # text, JSON + HTML output
 │   └── test/                # 72 tests
 ```
 
