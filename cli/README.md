@@ -8,6 +8,18 @@ From source during development:
 
     dart pub global activate --source path cli/
 
+## Update
+
+After pulling new changes, deactivate and re-activate to clear the
+cached snapshot:
+
+    dart pub global deactivate klamben
+    dart pub global activate --source path cli/
+
+> **Why not just re-activate?** Dart caches a compiled snapshot that
+> may not refresh on re-activate. Deactivating first ensures a clean
+> rebuild.
+
 ## Usage
 
     klamben detect lib/

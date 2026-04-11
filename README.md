@@ -122,6 +122,18 @@ The install script detects previously installed files via
 `.klamben-manifest.json` and updates them automatically without
 touching your custom files.
 
+### Updating the CLI
+
+```bash
+cd ~/klamben && git pull
+dart pub global deactivate klamben
+cd cli && dart pub global activate --source path .
+```
+
+> **Why deactivate first?** Dart caches a compiled snapshot that may
+> not refresh on re-activate. Deactivating first ensures a clean
+> rebuild.
+
 ## CLI detector
 
 Standalone Dart CLI that scans Flutter projects for anti-patterns
